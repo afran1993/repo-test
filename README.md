@@ -1,1 +1,1 @@
-Siamo una squadra fortissimi
+Siamo una squadra fortissimi!
