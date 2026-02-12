@@ -1,0 +1,19 @@
+{
+  "player": {
+    "id": "player",
+    "name": "AutoTester",
+    "archetype": "warrior",
+    "level": 1,
+    "hp": 9,
+    "inventory": [
+      {
+        "id": "potion_small",
+        "display": "Small Potion"
+      },
+      {
+        "id": "test_token",
+        "display": "Token"
+      }
+    ]
+  }
+}

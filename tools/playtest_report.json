@@ -1,0 +1,240 @@
+{
+  "logs": [
+    {
+      "level": "info",
+      "msg": "Created player AutoTester as warrior"
+    },
+    {
+      "level": "info",
+      "msg": "Explore to hearthvale/outskirts"
+    },
+    {
+      "level": "info",
+      "msg": "Explore to hearthvale/outskirts"
+    },
+    {
+      "level": "info",
+      "msg": "Explore to darkcave/entrance"
+    },
+    {
+      "level": "info",
+      "msg": "Explore to hearthvale/outskirts"
+    },
+    {
+      "level": "info",
+      "msg": "Explore to hearthvale/outskirts"
+    },
+    {
+      "level": "info",
+      "msg": "Explore to darkcave/entrance"
+    },
+    {
+      "level": "info",
+      "msg": "Explore to darkcave/entrance"
+    },
+    {
+      "level": "info",
+      "msg": "Explore to hearthvale/outskirts"
+    },
+    {
+      "level": "info",
+      "msg": "Moved to NPC location ('hearthvale', 'town_square')"
+    },
+    {
+      "level": "info",
+      "msg": "Talked to mayor"
+    },
+    {
+      "level": "info",
+      "msg": "Talked to mayor"
+    },
+    {
+      "level": "info",
+      "msg": "Talked to mayor"
+    },
+    {
+      "level": "info",
+      "msg": "Talked to mayor"
+    },
+    {
+      "level": "info",
+      "msg": "Talked to mayor"
+    },
+    {
+      "level": "info",
+      "msg": "Talked to mayor"
+    },
+    {
+      "level": "info",
+      "msg": "Start combat vs Goblin"
+    },
+    {
+      "level": "info",
+      "msg": "Player attack deals 15"
+    },
+    {
+      "level": "info",
+      "msg": "Enemy Goblin defeated"
+    },
+    {
+      "level": "info",
+      "msg": "Drops: {'gold': 0, 'items': []}"
+    },
+    {
+      "level": "info",
+      "msg": "Start combat vs Skeleton Warrior"
+    },
+    {
+      "level": "info",
+      "msg": "Player attack deals 14"
+    },
+    {
+      "level": "info",
+      "msg": "Enemy attack deals 7"
+    },
+    {
+      "level": "info",
+      "msg": "Player attack deals 13"
+    },
+    {
+      "level": "info",
+      "msg": "Enemy Skeleton Warrior defeated"
+    },
+    {
+      "level": "info",
+      "msg": "Drops: {'gold': 5, 'items': []}"
+    },
+    {
+      "level": "info",
+      "msg": "Start combat vs Wisp"
+    },
+    {
+      "level": "info",
+      "msg": "Player used stab -> {'ok': True, 'damage': 14, 'reacted': False}"
+    },
+    {
+      "level": "info",
+      "msg": "Enemy Wisp defeated"
+    },
+    {
+      "level": "info",
+      "msg": "Drops: {'gold': 2, 'items': []}"
+    },
+    {
+      "level": "info",
+      "msg": "Start combat vs Red Slime"
+    },
+    {
+      "level": "info",
+      "msg": "Player attack deals 14"
+    },
+    {
+      "level": "info",
+      "msg": "Enemy Red Slime defeated"
+    },
+    {
+      "level": "info",
+      "msg": "Drops: {'gold': 0, 'items': []}"
+    },
+    {
+      "level": "info",
+      "msg": "Start combat vs Ghost"
+    },
+    {
+      "level": "info",
+      "msg": "Player used stab -> {'ok': False, 'msg': 'Ability on cooldown'}"
+    },
+    {
+      "level": "info",
+      "msg": "Enemy attack deals 8"
+    },
+    {
+      "level": "info",
+      "msg": "Player used stab -> {'ok': False, 'msg': 'Ability on cooldown'}"
+    },
+    {
+      "level": "info",
+      "msg": "Enemy attack deals 9"
+    },
+    {
+      "level": "info",
+      "msg": "Player attack deals 11"
+    },
+    {
+      "level": "info",
+      "msg": "Enemy attack deals 11"
+    },
+    {
+      "level": "info",
+      "msg": "Player used stab -> {'ok': False, 'msg': 'Ability on cooldown'}"
+    },
+    {
+      "level": "info",
+      "msg": "Enemy attack deals 8"
+    },
+    {
+      "level": "info",
+      "msg": "Start combat vs Ghost"
+    },
+    {
+      "level": "info",
+      "msg": "Player used stab -> {'ok': False, 'msg': 'Ability on cooldown'}"
+    },
+    {
+      "level": "info",
+      "msg": "Enemy attack deals 9"
+    },
+    {
+      "level": "info",
+      "msg": "Start combat vs Red Slime"
+    },
+    {
+      "level": "info",
+      "msg": "Player attack deals 13"
+    },
+    {
+      "level": "info",
+      "msg": "Enemy Red Slime defeated"
+    },
+    {
+      "level": "info",
+      "msg": "Drops: {'gold': 0, 'items': []}"
+    },
+    {
+      "level": "info",
+      "msg": "Start combat vs Troll"
+    },
+    {
+      "level": "info",
+      "msg": "Player used stab -> {'ok': False, 'msg': 'Ability on cooldown'}"
+    },
+    {
+      "level": "info",
+      "msg": "Enemy attack deals 16"
+    },
+    {
+      "level": "info",
+      "msg": "No materials for crafting"
+    },
+    {
+      "level": "info",
+      "msg": "Dialogue branching tested"
+    },
+    {
+      "level": "info",
+      "msg": "Save/load OK"
+    }
+  ],
+  "errors": [],
+  "warnings": [],
+  "player": {
+    "name": "AutoTester",
+    "hp": 9,
+    "level": 1,
+    "gold": 50,
+    "inventory": [
+      "potion_small",
+      "test_token"
+    ]
+  }
+}
