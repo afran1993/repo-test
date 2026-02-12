@@ -1,0 +1,17 @@
+{
+  "spawn_tables": {
+    "hearthvale": [
+      {"id": "slime_red", "weight": 30, "min_tier": 1, "max_tier": 1},
+      {"id": "goblin", "weight": 25, "min_tier": 1, "max_tier": 2},
+      {"id": "wild_wolf", "weight": 20, "min_tier": 1, "max_tier": 1},
+      {"id": "bandit", "weight": 10, "min_tier": 1, "max_tier": 2},
+      {"id": "wisp", "weight": 5, "min_tier": 1, "max_tier": 1}
+    ],
+    "darkcave": [
+      {"id": "skeleton_warrior", "weight": 30, "min_tier": 2, "max_tier": 3},
+      {"id": "troll", "weight": 10, "min_tier": 3, "max_tier": 4},
+      {"id": "ghost", "weight": 20, "min_tier": 2, "max_tier": 3},
+      {"id": "wisp", "weight": 15, "min_tier": 1, "max_tier": 2}
+    ]
+  }
+}

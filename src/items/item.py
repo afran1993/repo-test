@@ -11,4 +11,6 @@ class Item:
         self.slot = data.get('slot', 'main')
 
     def short(self):
-        return f"{self.display} ({self.weapon_type})"
+        from src.i18n import t
+        name = t(self.name_key) if self.name_key else self.display
+        return f"{name} ({self.weapon_type})"

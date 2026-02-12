@@ -12,5 +12,55 @@
   "msg.choose_item": "Choose an item to equip:",
   "msg.can_equip": "You can equip this item.",
   "msg.cannot_equip": "You cannot equip this item with your class."
+
+  ,"menu.title":"Menu",
+  "menu.inventory":"Inventory",
+  "menu.equipment":"Equipment",
+  "menu.skills":"Skills",
+  "menu.map":"Map",
+  "menu.journal":"Journal",
+  "menu.close":"Close",
+  "msg.no_one_here":"No one to talk to here.",
+  "msg.unknown_command":"Unknown command."
+
+  ,"enemy.slime_red":"Red Slime",
+  "enemy.slime_blue":"Blue Slime",
+  "enemy.slime_green":"Green Slime",
+  "enemy.goblin":"Goblin",
+  "enemy.stone_golem":"Stone Golem",
+  "enemy.skeleton_warrior":"Skeleton Warrior",
+  "enemy.wild_wolf":"Wild Wolf",
+  "enemy.orc":"Orc",
+  "enemy.elemental_fire":"Fire Elemental",
+  "enemy.elemental_water":"Water Elemental",
+  "enemy.elemental_wind":"Wind Elemental",
+  "enemy.elemental_earth":"Earth Elemental",
+  "enemy.ghost":"Ghost",
+  "enemy.young_dragon":"Young Dragon",
+  "enemy.giant_serpent":"Giant Serpent",
+  "enemy.troll":"Troll",
+  "enemy.chimera":"Chimera",
+  "enemy.lich":"Lich",
+  "enemy.bandit":"Bandit",
+  "enemy.ogre":"Ogre",
+  "enemy.wisp":"Wisp"
 }
+
+,
+  "item.potion.small": "Small Healing Potion",
+  "item.fragment.stone": "Stone Fragment",
+  "item.fragment.bone": "Bone Fragment",
+  "item.pelt.wolf": "Wolf Pelt",
+  "item.tusk.orc": "Orc Tusk",
+  "item.scale.dragon": "Dragon Scale",
+  "item.fang.serpent": "Serpent Fang",
+  "item.hide.troll": "Troll Hide",
+  "item.core.chimera": "Chimera Core",
+  "item.essence.phantom": "Phantom Essence",
+  "item.mask.bandit": "Bandit Mask",
+  "item.club.ogre": "Ogre Club",
+  "item.fragment.spark": "Spark Fragment",
+  "item.essence.spirit": "Spirit Essence"
+
+
 

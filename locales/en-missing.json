@@ -1,0 +1,19 @@
+{
+  "region.hearthvale.name": "Hearthvale",
+  "region.hearthvale.area.town_square.name": "Town Square",
+  "region.hearthvale.area.town_square.desc": "A bustling square with a fountain and market stalls.",
+  "region.hearthvale.area.blacksmith.name": "Blacksmith",
+  "region.hearthvale.area.blacksmith.desc": "A warm forge where the smith hammers metal.",
+  "region.hearthvale.area.outskirts.name": "Outskirts",
+  "region.hearthvale.area.outskirts.desc": "Rolling fields and a path into the wild.",
+  "region.darkcave.name": "Dark Cave",
+  "region.darkcave.area.entrance.name": "Cave Entrance",
+  "region.darkcave.area.entrance.desc": "A yawning mouth in the rock, cold air drifting out.",
+  "npc.brynn.name": "Brynn the Blacksmith",
+  "npc.mayor.name": "Mayor Elen",
+  "quest.main_001.title": "The Lost Artifact",
+  "quest.main_001.description": "Find the ancient artifact for the king.",
+  "quest.main_001.stage.1": "Talk to the king",
+  "quest.main_001.stage.2": "Find the artifact",
+  "quest.main_001.stage.3": "Return to the king"
+}

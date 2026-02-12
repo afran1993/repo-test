@@ -1,11 +1,19 @@
 import random
+from src.elements.elements import element_modifier, reaction_for
 
 
 def calculate_damage(attacker, defender, base=5, element=None):
-    # base damage modified by attacker stats and defender defenses
+    """Calculate physical/spell damage considering stats and elemental modifiers.
+    - attacker/defender: Character-like objects with .stats and optional .resistances
+    - element: string element name or None
+    """
     atk = base + attacker.stats.get('str', 5)
     defense = defender.stats.get('end', 3)
-    dmg = max(1, atk - int(defense * 0.5) + random.randint(-2, 2))
+    raw = max(1, atk - int(defense * 0.5) + random.randint(-2, 2))
+    # element modifier
+    resistances = getattr(defender, 'resistances', {})
+    emod = element_modifier(element or 'None', resistances)
+    dmg = max(0, int(raw * emod))
     return dmg
 
 
@@ -23,7 +31,12 @@ def turn_based_fight(player, enemy, engine=None):
             print("Actions: (1)Attack  (2)Use Potion  (3)Flee")
             choice = input('-> ').strip()
             if choice == '1':
-                dmg = calculate_damage(player, enemy)
+                # choose simple attack or elemental if equipped
+                elem = None
+                main = player.equipment.get('main')
+                if main and isinstance(main, dict):
+                    elem = main.get('element')
+                dmg = calculate_damage(player, enemy, base=5, element=elem)
                 enemy.hp -= dmg
                 print(f"You hit {enemy.name} for {dmg} dmg.")
             elif choice == '2':
@@ -45,10 +58,36 @@ def turn_based_fight(player, enemy, engine=None):
             else:
                 print("Invalid action, you lose your turn.")
         else:
-            dmg = calculate_damage(enemy, player)
-            player.hp -= dmg
-            print(f"{enemy.name} hits you for {dmg} dmg.")
+                # enemy action: use AI to decide whether to use ability or attack
+                acted = False
+                from src.enemies.ai import choose_enemy_action
+                action = choose_enemy_action(enemy, player, engine=engine)
+                if action.get('type') == 'ability':
+                    from src.enemies.abilities import use_enemy_ability
+                    abil = action.get('ability')
+                    res = use_enemy_ability(abil, enemy, player, engine=engine)
+                    if res:
+                        if res.get('damage'):
+                            print(f"{enemy.name} uses {res.get('name')} and deals {res.get('damage')} dmg.")
+                        elif res.get('hits'):
+                            print(f"{enemy.name} uses {res.get('name')} and hits {len(res.get('hits'))} times for total {res.get('damage')}.")
+                        elif res.get('spawn'):
+                            print(f"{enemy.name} summons {res.get('spawn')}!")
+                        acted = True
+                if not acted:
+                    dmg = calculate_damage(enemy, player)
+                    player.hp -= dmg
+                    print(f"{enemy.name} hits you for {dmg} dmg.")
         turn += 1
+
+        # after each full round, tick statuses
+        if turn % 2 == 0:
+            pa = player.tick_statuses()
+            ea = enemy.tick_statuses()
+            for n,d in pa:
+                print(f"Status {n} deals {d} to {player.name}.")
+            for n,d in ea:
+                print(f"Status {n} deals {d} to {enemy.name}.")
 
     if player.is_alive():
         print(f"You defeated {enemy.name}!")

@@ -1,0 +1,26 @@
+{
+  "enemies": [
+    {"id": "slime_red", "display": "Red Slime", "tags": ["slime","common"], "tier": 1, "hp": 8, "atk": 2, "def": 0, "speed": 3, "element": "None"},
+    {"id": "slime_blue", "display": "Blue Slime", "tags": ["slime","common"], "tier": 1, "hp": 9, "atk": 2, "def": 0, "speed": 3, "element": "Water"},
+    {"id": "slime_green", "display": "Green Slime", "tags": ["slime","common"], "tier": 1, "hp": 10, "atk": 2, "def": 1, "speed": 3, "element": "Earth"},
+    {"id": "goblin", "display": "Goblin", "tags": ["humanoid","pack"], "tier": 1, "hp": 14, "atk": 4, "def": 1, "speed": 6, "element": "None", "behaviors": ["steal"]},
+    {"id": "goblin", "display": "Goblin", "tags": ["humanoid","pack"], "tier": 1, "hp": 14, "atk": 4, "def": 1, "speed": 6, "element": "None", "behaviors": ["steal"], "drops": [{"gold": {"min":2,"max":6}, "chance": 0.9}, {"item":"potion_small","chance":0.05}]},
+    {"id": "stone_golem", "display": "Stone Golem", "tags": ["construct"], "tier": 3, "hp": 80, "atk": 10, "def": 8, "speed": 2, "element": "Earth", "vulnerabilities": ["Arcane"], "drops": [{"gold": {"min":10,"max":30}, "chance":0.9}, {"item":"stone_fragment","chance":0.3}]},
+    {"id": "skeleton_warrior", "display": "Skeleton Warrior", "tags": ["undead"], "tier": 2, "hp": 20, "atk": 6, "def": 2, "speed": 4, "element": "None", "immunities": ["Poison"], "vulnerabilities": ["Holy"], "drops": [{"gold": {"min":3,"max":8}, "chance":0.8}, {"item":"bone_fragment","chance":0.4}]},
+    {"id": "wild_wolf", "display": "Wild Wolf", "tags": ["beast"], "tier": 1, "hp": 18, "atk": 5, "def": 1, "speed": 8, "element": "None", "drops": [{"gold": {"min":1,"max":4}, "chance":0.9}, {"item":"wolf_pelt","chance":0.25}]},
+    {"id": "orc", "display": "Orc", "tags": ["brute"], "tier": 2, "hp": 40, "atk": 9, "def": 4, "speed": 3, "element": "None", "drops": [{"gold": {"min":5,"max":15}, "chance":0.9}, {"item":"orc_tusk","chance":0.15}]},
+    {"id": "elemental_fire", "display": "Fire Elemental", "tags": ["elemental","magic"], "tier": 2, "hp": 30, "atk": 8, "def": 2, "speed": 5, "element": "Fire", "resistances": {"Fire": 0.5}, "drops": [{"gold": {"min":8,"max":20}, "chance":0.7}]},
+    {"id": "elemental_water", "display": "Water Elemental", "tags": ["elemental","magic"], "tier": 2, "hp": 30, "atk": 7, "def": 2, "speed": 5, "element": "Water", "resistances": {"Water": 0.5}},
+    {"id": "elemental_wind", "display": "Wind Elemental", "tags": ["elemental","magic"], "tier": 2, "hp": 28, "atk": 7, "def": 1, "speed": 7, "element": "Air"},
+    {"id": "elemental_earth", "display": "Earth Elemental", "tags": ["elemental","magic"], "tier": 2, "hp": 36, "atk": 8, "def": 4, "speed": 3, "element": "Earth"},
+    {"id": "ghost", "display": "Ghost", "tags": ["undead","spirit"], "tier": 2, "hp": 22, "atk": 6, "def": 0, "speed": 6, "element": "Arcane", "immunities": ["Physical"], "drops": [{"gold": {"min":5,"max":12}, "chance":0.6}, {"item":"spirit_essence","chance":0.2}]},
+    {"id": "young_dragon", "display": "Young Dragon", "tags": ["dragon","boss"], "tier": 4, "hp": 150, "atk": 18, "def": 6, "speed": 5, "element": "Fire", "abilities": ["breath_fire"], "drops": [{"gold": {"min":100,"max":300}, "chance":1.0}, {"item":"dragon_scale","chance":0.4}]},
+    {"id": "giant_serpent", "display": "Giant Serpent", "tags": ["beast","venom"], "tier": 3, "hp": 60, "atk": 10, "def": 3, "speed": 6, "element": "None", "abilities": ["poison_bite"], "drops": [{"gold": {"min":12,"max":30}, "chance":0.9}, {"item":"serpent_fang","chance":0.25}]},
+    {"id": "troll", "display": "Troll", "tags": ["giant"], "tier": 3, "hp": 120, "atk": 14, "def": 5, "speed": 2, "element": "None", "regeneration": 2, "drops": [{"gold": {"min":20,"max":60}, "chance":0.9}, {"item":"troll_hide","chance":0.2}]},
+    {"id": "chimera", "display": "Chimera", "tags": ["chimera","boss"], "tier": 4, "hp": 140, "atk": 16, "def": 5, "speed": 5, "element": "Fire", "abilities": ["multi_attack"], "drops": [{"gold": {"min":80,"max":200}, "chance":1.0}, {"item":"chimera_core","chance":0.3}]},
+    {"id": "lich", "display": "Lich", "tags": ["undead","caster"], "tier": 5, "hp": 100, "atk": 12, "def": 3, "speed": 4, "element": "Arcane", "abilities": ["raise_skeleton","curse"], "drops": [{"gold": {"min":150,"max":400}, "chance":1.0}, {"item":"phantom_essence","chance":0.5}]},
+    {"id": "bandit", "display": "Bandit", "tags": ["human","bandit"], "tier": 1, "hp": 22, "atk": 6, "def": 1, "speed": 5, "element": "None", "drops": [{"gold": {"min":2,"max":10}, "chance":0.9}, {"item":"bandit_mask","chance":0.05}]},
+    {"id": "ogre", "display": "Ogre", "tags": ["ogre","brute"], "tier": 3, "hp": 110, "atk": 15, "def": 6, "speed": 2, "element": "None", "drops": [{"gold": {"min":30,"max":80}, "chance":0.95}, {"item":"ogre_club","chance":0.1}]},
+    {"id": "wisp", "display": "Wisp", "tags": ["fey","magic"], "tier": 1, "hp": 12, "atk": 5, "def": 0, "speed": 9, "element": "Lightning", "drops": [{"gold": {"min":1,"max":6}, "chance":0.6}, {"item":"spark_frag","chance":0.15}]}
+  ]
+}

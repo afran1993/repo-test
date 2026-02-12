@@ -4,16 +4,21 @@ import os
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 
 
+from src.i18n import t_data
+
+
 class Area:
-    def __init__(self, id_, name, desc, connections=None, region=None):
+    def __init__(self, id_, data: dict, connections=None, region=None):
+        # data is the original dict from JSON (may contain name/name_key/desc/desc_key)
         self.id = id_
-        self.name = name
-        self.desc = desc
+        self.data = data
         self.connections = connections or []
         self.region = region
 
     def describe(self, player):
-        return f"{self.name}\n{self.desc}"
+        name = t_data(self.data, 'name_key', 'name')
+        desc = t_data(self.data, 'desc_key', 'desc')
+        return f"{name}\n{desc}"
 
 
 class Region:
@@ -21,7 +26,7 @@ class Region:
         self.id = id_
         self.name = name
         self.climate = climate
-        self.areas = {a['id']: Area(a['id'], a['name'], a['desc'], a.get('connections', []), id_) for a in areas}
+        self.areas = {a['id']: Area(a['id'], a, a.get('connections', []), id_) for a in areas}
 
 
 class World:

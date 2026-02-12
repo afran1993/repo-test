@@ -1,0 +1,7 @@
+{
+  "warrior": ["stab"],
+  "archer": ["stab"],
+  "mage": ["fireball"],
+  "druid": ["fireball"],
+  "witch": ["fireball"]
+}

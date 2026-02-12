@@ -35,4 +35,94 @@
     "stats": {"def": 2},
     "element": "Earth"
   }
+  ,
+  {
+    "id": "potion_small",
+    "name_key": "item.potion.small",
+    "display": "Small Healing Potion",
+    "type": "consumable",
+    "consumable": {"heal": 12}
+  },
+  {
+    "id": "stone_fragment",
+    "name_key": "item.fragment.stone",
+    "display": "Stone Fragment",
+    "type": "material"
+  },
+  {
+    "id": "bone_fragment",
+    "name_key": "item.fragment.bone",
+    "display": "Bone Fragment",
+    "type": "material"
+  },
+  {
+    "id": "wolf_pelt",
+    "name_key": "item.pelt.wolf",
+    "display": "Wolf Pelt",
+    "type": "material"
+  },
+  {
+    "id": "orc_tusk",
+    "name_key": "item.tusk.orc",
+    "display": "Orc Tusk",
+    "type": "material"
+  },
+  {
+    "id": "dragon_scale",
+    "name_key": "item.scale.dragon",
+    "display": "Dragon Scale",
+    "type": "material"
+  },
+  {
+    "id": "serpent_fang",
+    "name_key": "item.fang.serpent",
+    "display": "Serpent Fang",
+    "type": "material"
+  },
+  {
+    "id": "troll_hide",
+    "name_key": "item.hide.troll",
+    "display": "Troll Hide",
+    "type": "material"
+  },
+  {
+    "id": "chimera_core",
+    "name_key": "item.core.chimera",
+    "display": "Chimera Core",
+    "type": "material"
+  },
+  {
+    "id": "phantom_essence",
+    "name_key": "item.essence.phantom",
+    "display": "Phantom Essence",
+    "type": "material"
+  },
+  {
+    "id": "bandit_mask",
+    "name_key": "item.mask.bandit",
+    "display": "Bandit Mask",
+    "type": "equipment",
+    "slot": "head",
+    "stats": {"def": 1}
+  },
+  {
+    "id": "ogre_club",
+    "name_key": "item.club.ogre",
+    "display": "Ogre Club",
+    "type": "weapon",
+    "weapon_type": "Club",
+    "stats": {"atk": 8}
+  },
+  {
+    "id": "spark_frag",
+    "name_key": "item.fragment.spark",
+    "display": "Spark Fragment",
+    "type": "material"
+  },
+  {
+    "id": "spirit_essence",
+    "name_key": "item.essence.spirit",
+    "display": "Spirit Essence",
+    "type": "material"
+  }
 ]

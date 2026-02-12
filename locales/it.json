@@ -1,0 +1,25 @@
+{
+  "class.warrior": "Guerriero",
+  "class.archer": "Arciere",
+  "class.mage": "Mago",
+  "class.druid": "Druido",
+  "class.witch": "Strega",
+  "item.spear.iron": "Lancia di Ferro",
+  "item.staff.oak": "Bastone di Quercia",
+  "item.bow.hunter": "Arco del Cacciatore",
+  "item.shield.wood": "Scudo di Legno",
+  "msg.choose_class": "Scegli la tua classe:",
+  "msg.choose_item": "Scegli un oggetto da equipaggiare:",
+  "msg.can_equip": "Puoi equipaggiare questo oggetto.",
+  "msg.cannot_equip": "Non puoi equipaggiare questo oggetto con la tua classe."
+  ,"menu.title":"Menu",
+  "menu.inventory":"Inventario",
+  "menu.equipment":"Equipaggiamento",
+  "menu.skills":"Abilità",
+  "menu.map":"Mappa",
+  "menu.journal":"Diario",
+  "menu.close":"Chiudi",
+  "msg.no_one_here":"Nessuno con cui parlare qui.",
+  "msg.unknown_command":"Comando sconosciuto."
+}
+
