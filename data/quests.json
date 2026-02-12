@@ -1,0 +1,5 @@
+{
+  "quests": [
+    {"id": "main_001", "title": "The Lost Artifact", "description": "Find the ancient artifact for the king.", "stages": ["Talk to the king","Find the artifact","Return to the king"], "reward": {"gold":100}}
+  ]
+}

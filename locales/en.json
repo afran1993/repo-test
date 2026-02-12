@@ -1,0 +1,16 @@
+{
+  "class.warrior": "Warrior",
+  "class.archer": "Archer",
+  "class.mage": "Mage",
+  "class.druid": "Druid",
+  "class.witch": "Witch",
+  "item.spear.iron": "Iron Spear",
+  "item.staff.oak": "Oak Staff",
+  "item.bow.hunter": "Hunter's Bow",
+  "item.shield.wood": "Wooden Shield",
+  "msg.choose_class": "Choose your class:",
+  "msg.choose_item": "Choose an item to equip:",
+  "msg.can_equip": "You can equip this item.",
+  "msg.cannot_equip": "You cannot equip this item with your class."
+}
+

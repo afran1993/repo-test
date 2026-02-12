@@ -1,0 +1,38 @@
+[
+  {
+    "id": "spear_iron",
+    "name_key": "item.spear.iron",
+    "display": "Iron Spear",
+    "weapon_type": "Spear",
+    "allowed_classes": ["warrior", "druid"],
+    "stats": {"atk": 3},
+    "element": "None"
+  },
+  {
+    "id": "staff_oak",
+    "name_key": "item.staff.oak",
+    "display": "Oak Staff",
+    "weapon_type": "Staff",
+    "allowed_classes": ["mage", "witch", "druid"],
+    "stats": {"atk": 1, "spell_power": 4},
+    "element": "Arcane"
+  },
+  {
+    "id": "bow_hunter",
+    "name_key": "item.bow.hunter",
+    "display": "Hunter's Bow",
+    "weapon_type": "Bow",
+    "allowed_classes": ["archer"],
+    "stats": {"atk": 4},
+    "element": "None"
+  },
+  {
+    "id": "shield_wood",
+    "name_key": "item.shield.wood",
+    "display": "Wooden Shield",
+    "weapon_type": "Shield",
+    "allowed_classes": ["warrior"],
+    "stats": {"def": 2},
+    "element": "Earth"
+  }
+]

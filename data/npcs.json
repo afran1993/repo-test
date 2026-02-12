@@ -1,0 +1,6 @@
+{
+  "npcs": [
+    {"id": "brynn", "name": "Brynn the Blacksmith", "location": {"region": "hearthvale", "area": "blacksmith"}, "dialog": []},
+    {"id": "mayor", "name": "Mayor Elen", "location": {"region": "hearthvale", "area": "town_square"}, "dialog": []}
+  ]
+}

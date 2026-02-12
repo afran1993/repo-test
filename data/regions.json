@@ -1,0 +1,22 @@
+{
+  "regions": [
+    {
+      "id": "hearthvale",
+      "name": "Hearthvale",
+      "climate": "temperate",
+      "areas": [
+        {"id": "town_square", "name": "Town Square", "desc": "A bustling square with a fountain and market stalls." , "connections": ["blacksmith"]},
+        {"id": "blacksmith", "name": "Blacksmith", "desc": "A warm forge where the smith hammers metal.", "connections": ["town_square"]},
+        {"id": "outskirts", "name": "Outskirts", "desc": "Rolling fields and a path into the wild."}
+      ]
+    },
+    {
+      "id": "darkcave",
+      "name": "Dark Cave",
+      "climate": "underground",
+      "areas": [
+        {"id": "entrance", "name": "Cave Entrance", "desc": "A yawning mouth in the rock, cold air drifting out."}
+      ]
+    }
+  ]
+}

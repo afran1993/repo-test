@@ -1,0 +1,32 @@
+{
+  "warrior": {
+    "key": "class.warrior",
+    "display": "Warrior",
+    "allowed_weapons": ["Spear", "Sword", "Axe", "Shield", "Lance"],
+    "base_stats": {"hp": 45, "atk": 8, "def": 5}
+  },
+  "archer": {
+    "key": "class.archer",
+    "display": "Archer",
+    "allowed_weapons": ["Bow", "Crossbow", "Dagger"],
+    "base_stats": {"hp": 30, "atk": 7, "def": 3}
+  },
+  "mage": {
+    "key": "class.mage",
+    "display": "Mage",
+    "allowed_weapons": ["Staff", "Dagger"],
+    "base_stats": {"hp": 28, "atk": 4, "def": 2}
+  },
+  "druid": {
+    "key": "class.druid",
+    "display": "Druid",
+    "allowed_weapons": ["Staff", "Dagger", "Spear"],
+    "base_stats": {"hp": 32, "atk": 5, "def": 3}
+  },
+  "witch": {
+    "key": "class.witch",
+    "display": "Witch",
+    "allowed_weapons": ["Staff", "Dagger"],
+    "base_stats": {"hp": 26, "atk": 5, "def": 2}
+  }
+}
