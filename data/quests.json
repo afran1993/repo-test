@@ -1,5 +1,145 @@
 {
-  "quests": [
-    {"id": "main_001", "title": "The Lost Artifact", "description": "Find the ancient artifact for the king.", "stages": ["Talk to the king","Find the artifact","Return to the king"], "reward": {"gold":100}}
-  ]
+  "main_story": [
+    {
+      "id": "act_1_awakening",
+      "chapter": 1,
+      "title": "Il Risveglio",
+      "description": "Ti svegli sulla spiaggia senza memoria. Un anziano del villaggio può aiutarti a scoprire chi sei.",
+      "stages": [
+        "Esplora la spiaggia",
+        "Raggiungi il villaggio",
+        "Parla all'anziano"
+      ],
+      "location_triggers": {
+        "beach": "Riconosci la spiaggia dalle tue memorie",
+        "village": "Scopri il villaggio pacifico"
+      },
+      "boss_encounter": null,
+      "reward": {
+        "gold": 50,
+        "xp": 100,
+        "unlocks": "act_2_darkness"
+      }
+    },
+    {
+      "id": "act_2_darkness",
+      "chapter": 2,
+      "title": "L'Oscurità che Avanza",
+      "description": "L'anziano ti dice di uno strano male che si sta diffondendo dalle terre selvagge. Devi investigare.",
+      "stages": [
+        "Esplora la foresta",
+        "Scopri la fonte del male",
+        "Sconfiggi l'Emissario d'Ombra nella grotta"
+      ],
+      "location_triggers": {
+        "forest_entrance": "Avverti un male strano qui",
+        "cave_entrance": "Una presenza oscura provenire dalla grotta",
+        "cave_deep": "Qui si concentra il male!"
+      },
+      "boss_encounter": "shadow_emissary",
+      "reward": {
+        "gold": 150,
+        "xp": 300,
+        "unlock_weapon": "sword_crystal",
+        "unlocks": "act_3_elements"
+      }
+    },
+    {
+      "id": "act_3_elements",
+      "chapter": 3,
+      "title": "I Quattro Elementi",
+      "description": "L'anziano rivela che pezzi di potere elementale possono rafforzarti contro il male. Devi raccoglierli.",
+      "stages": [
+        "Raccogli il potere del Fuoco dal Vulcano",
+        "Raccogli il potere dell'Acqua dalla Laguna",
+        "Raccogli il potere dell'Aria dalla Vetta",
+        "Raccogli il potere della Terra dalla Foresta Profonda"
+      ],
+      "location_triggers": {
+        "volcano_core": "Senti il calore del potere del Fuoco",
+        "underwater_cave": "Senti il flusso del potere dell'Acqua",
+        "sky_temple": "Senti il vento del potere dell'Aria",
+        "cave_deep": "Senti la terra del potere della Terra"
+      },
+      "boss_encounters": [
+        "fire_lord",
+        "water_guardian",
+        "sky_warden",
+        "earth_titan"
+      ],
+      "reward": {
+        "gold": 300,
+        "xp": 600,
+        "unlock_weapons": ["sword_fire", "sword_ice", "staff_thunder", "axe_earth"],
+        "unlocks": "act_4_ascension"
+      }
+    },
+    {
+      "id": "act_4_ascension",
+      "chapter": 4,
+      "title": "L'Ascesa",
+      "description": "Con i poteri elementali, sei quasi pronto. Devi raggiungere il Tempio del Cielo e raccogliere la benedizione finale.",
+      "stages": [
+        "Raggiungi la Vetta della Montagna",
+        "Ascendi il Tempio del Cielo",
+        "Ricevi la benedizione del drago celeste"
+      ],
+      "location_triggers": {
+        "mountain_path": "Cominci l'ascesa finale",
+        "summit": "Sei quasi alla cima",
+        "sky_temple": "Senti l'antica magia del tempio"
+      },
+      "boss_encounter": "sky_dragon",
+      "reward": {
+        "gold": 400,
+        "xp": 800,
+        "unlock_ability": "divine_blessing",
+        "unlocks": "act_5_final"
+      }
+    },
+    {
+      "id": "act_5_final",
+      "chapter": 5,
+      "title": "Lo Scontro Finale",
+      "description": "È giunto il momento. Il Lich Supremo ha corrotto il Tempio dell'Ombra. Tu sei l'unico che può fermarlo.",
+      "stages": [
+        "Cammina verso il Tempio dell'Ombra",
+        "Sconfiggi i Guardiani dell'Ombra",
+        "Affronta il Lich Supremo e salva il mondo"
+      ],
+      "location_triggers": {
+        "shadow_temple": "Senti la presenza maligna del Lich Supremo"
+      },
+      "boss_encounter": "supreme_lich",
+      "reward": {
+        "gold": 1000,
+        "xp": 2000,
+        "title": "Salvatore del Mondo",
+        "unlocks": "postgame"
+      }
+    }
+  ],
+  "postgame": {
+    "description": "La storia principale è completa! Ora puoi sfidare nemici endgame infinitamente scalanti.",
+    "endgame_tiers": [
+      {
+        "tier": 1,
+        "min_level": 10,
+        "description": "Sfide di Classe Dimensione",
+        "reward_multiplier": 1.5
+      },
+      {
+        "tier": 2,
+        "min_level": 15,
+        "description": "Sfide di Classe Leggende",
+        "reward_multiplier": 2.0
+      },
+      {
+        "tier": 3,
+        "min_level": 20,
+        "description": "Sfide di Classe Mitiche",
+        "reward_multiplier": 3.0
+      }
+    ]
+  }
 }

@@ -1,11 +1,73 @@
 [
   {
+    "id": "sword_iron",
+    "name_key": "item.sword.iron",
+    "display": "Iron Sword",
+    "weapon_type": "Sword",
+    "type": "weapon",
+    "stats": {"atk": 5, "dex": 2},
+    "evasion_bonus": 0.15,
+    "element": "None"
+  },
+  {
+    "id": "sword_rusty",
+    "name_key": "item.sword.rusty",
+    "display": "Rusty Sword",
+    "weapon_type": "Sword",
+    "type": "weapon",
+    "stats": {"atk": 3, "dex": 1},
+    "evasion_bonus": 0.10,
+    "element": "None"
+  },
+  {
+    "id": "sword_steel",
+    "name_key": "item.sword.steel",
+    "display": "Steel Sword",
+    "weapon_type": "Sword",
+    "type": "weapon",
+    "stats": {"atk": 7, "dex": 2},
+    "evasion_bonus": 0.12,
+    "element": "None"
+  },
+  {
+    "id": "sword_great",
+    "name_key": "item.sword.great",
+    "display": "Great Sword",
+    "weapon_type": "Sword",
+    "type": "weapon",
+    "stats": {"atk": 10, "dex": -1},
+    "evasion_bonus": -0.05,
+    "element": "None"
+  },
+  {
+    "id": "sword_crystal",
+    "name_key": "item.sword.crystal",
+    "display": "Crystal Sword",
+    "weapon_type": "Sword",
+    "type": "weapon",
+    "stats": {"atk": 9, "dex": 3},
+    "evasion_bonus": 0.20,
+    "element": "Arcane"
+  },
+  {
+    "id": "axe_iron",
+    "name_key": "item.axe.iron",
+    "display": "Iron Axe",
+    "weapon_type": "Axe",
+    "type": "weapon",
+    "stats": {"atk": 8, "dex": -1},
+    "evasion_bonus": -0.10,
+    "element": "None"
+  },
+  {
     "id": "spear_iron",
     "name_key": "item.spear.iron",
     "display": "Iron Spear",
     "weapon_type": "Spear",
+    "type": "weapon",
     "allowed_classes": ["warrior", "druid"],
-    "stats": {"atk": 3},
+    "stats": {"atk": 6, "dex": 0},
+    "evasion_bonus": 0.05,
     "element": "None"
   },
   {
@@ -34,14 +96,109 @@
     "allowed_classes": ["warrior"],
     "stats": {"def": 2},
     "element": "Earth"
-  }
-  ,
+  },
+  {
+    "id": "sword_fire",
+    "name_key": "item.sword.fire",
+    "display": "Flaming Sword",
+    "weapon_type": "Sword",
+    "type": "weapon",
+    "stats": {"atk": 8, "dex": 1},
+    "evasion_bonus": 0.12,
+    "element": "Fire"
+  },
+  {
+    "id": "sword_ice",
+    "name_key": "item.sword.ice",
+    "display": "Frozen Blade",
+    "weapon_type": "Sword",
+    "type": "weapon",
+    "stats": {"atk": 7, "dex": 2},
+    "evasion_bonus": 0.18,
+    "element": "Water"
+  },
+  {
+    "id": "staff_thunder",
+    "name_key": "item.staff.thunder",
+    "display": "Lightning Staff",
+    "weapon_type": "Staff",
+    "type": "weapon",
+    "stats": {"atk": 6, "dex": 0},
+    "element": "Lightning"
+  },
+  {
+    "id": "axe_earth",
+    "name_key": "item.axe.earth",
+    "display": "Earthshaker Axe",
+    "weapon_type": "Axe",
+    "type": "weapon",
+    "stats": {"atk": 11, "dex": -2},
+    "evasion_bonus": -0.15,
+    "element": "Earth"
+  },
+  {
   {
     "id": "potion_small",
     "name_key": "item.potion.small",
     "display": "Small Healing Potion",
     "type": "consumable",
     "consumable": {"heal": 12}
+  },
+  {
+    "id": "potion_medium",
+    "name_key": "item.potion.medium",
+    "display": "Medium Healing Potion",
+    "type": "consumable",
+    "consumable": {"heal": 25}
+  },
+  {
+    "id": "potion_strong",
+    "name_key": "item.potion.strong",
+    "display": "Strong Healing Potion",
+    "type": "consumable",
+    "consumable": {"heal": 50}
+  },
+  {
+    "id": "mana_potion",
+    "name_key": "item.potion.mana",
+    "display": "Mana Potion",
+    "type": "consumable",
+    "consumable": {"mana": 20}
+  },
+  {
+    "id": "mana_potion_strong",
+    "name_key": "item.potion.mana_strong",
+    "display": "Strong Mana Potion",
+    "type": "consumable",
+    "consumable": {"mana": 50}
+  },
+  {
+    "id": "gold_coins_small",
+    "name_key": "item.gold.small",
+    "display": "Small Coin Pouch",
+    "type": "treasure",
+    "treasure": {"gold": 15}
+  },
+  {
+    "id": "gold_coins_medium",
+    "name_key": "item.gold.medium",
+    "display": "Medium Coin Pouch",
+    "type": "treasure",
+    "treasure": {"gold": 40}
+  },
+  {
+    "id": "gold_coins_large",
+    "name_key": "item.gold.large",
+    "display": "Large Coin Pouch",
+    "type": "treasure",
+    "treasure": {"gold": 75}
+  },
+  {
+    "id": "gold_coins_huge",
+    "name_key": "item.gold.huge",
+    "display": "Huge Coin Pouch",
+    "type": "treasure",
+    "treasure": {"gold": 150}
   },
   {
     "id": "stone_fragment",
@@ -124,5 +281,89 @@
     "name_key": "item.essence.spirit",
     "display": "Spirit Essence",
     "type": "material"
+  },
+  {
+    "id": "ring_strength",
+    "name_key": "item.ring.strength",
+    "display": "Ring of Strength",
+    "type": "accessory",
+    "slot": "ring",
+    "stats": {"atk": 3},
+    "rarity": "uncommon"
+  },
+  {
+    "id": "ring_dexterity",
+    "name_key": "item.ring.dexterity",
+    "display": "Ring of Dexterity",
+    "type": "accessory",
+    "slot": "ring",
+    "stats": {"dex": 3},
+    "evasion_bonus": 0.10,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "ring_vitality",
+    "name_key": "item.ring.vitality",
+    "display": "Ring of Vitality",
+    "type": "accessory",
+    "slot": "ring",
+    "stats": {"max_hp": 10},
+    "rarity": "uncommon"
+  },
+  {
+    "id": "necklace_power",
+    "name_key": "item.necklace.power",
+    "display": "Necklace of Power",
+    "type": "accessory",
+    "slot": "necklace",
+    "stats": {"atk": 2, "dex": 1},
+    "rarity": "rare"
+  },
+  {
+    "id": "necklace_protection",
+    "name_key": "item.necklace.protection",
+    "display": "Necklace of Protection",
+    "type": "accessory",
+    "slot": "necklace",
+    "stats": {"max_hp": 15},
+    "evasion_bonus": 0.05,
+    "rarity": "rare"
+  },
+  {
+    "id": "amulet_wisdom",
+    "name_key": "item.amulet.wisdom",
+    "display": "Amulet of Wisdom",
+    "type": "accessory",
+    "slot": "amulet",
+    "stats": {"atk": 1, "dex": 2},
+    "rarity": "rare"
+  },
+  {
+    "id": "amulet_fortune",
+    "name_key": "item.amulet.fortune",
+    "display": "Amulet of Fortune",
+    "type": "accessory",
+    "slot": "amulet",
+    "gold_bonus": 0.15,
+    "rarity": "epic"
+  },
+  {
+    "id": "bracelet_speed",
+    "name_key": "item.bracelet.speed",
+    "display": "Bracelet of Speed",
+    "type": "accessory",
+    "slot": "bracelet",
+    "stats": {"dex": 4},
+    "evasion_bonus": 0.15,
+    "rarity": "rare"
+  },
+  {
+    "id": "bracelet_endurance",
+    "name_key": "item.bracelet.endurance",
+    "display": "Bracelet of Endurance",
+    "type": "accessory",
+    "slot": "bracelet",
+    "stats": {"max_hp": 20},
+    "rarity": "rare"
   }
 ]

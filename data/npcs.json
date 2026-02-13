@@ -1,6 +1,190 @@
 {
   "npcs": [
-    {"id": "brynn", "name": "Brynn the Blacksmith", "location": {"region": "hearthvale", "area": "blacksmith"}, "dialog": []},
-    {"id": "mayor", "name": "Mayor Elen", "location": {"region": "hearthvale", "area": "town_square"}, "dialog": []}
+    {
+      "id": "village_elder",
+      "name": "Anziano del Villaggio",
+      "location": "village",
+      "dialogs": [
+        {
+          "id": "intro",
+          "npc_name": "Anziano del Villaggio",
+          "text": "Benvenuto nel nostro umile villaggio, straniero senza memoria...\nSono l'anziano di questo luogo. Vedo la confusione nei tuoi occhi.\n\nPrima di partire nel mondo, devi imparare le abilità essenziali per sopravvivere.",
+          "options": [
+            {
+              "id": "ask_swimming",
+              "text": "Come si sopravvive a questo mondo?",
+              "teaches_skill": "swimming",
+              "xp_reward": 50,
+              "response": "Ah, una buona domanda! Vedi, il nostro villaggio è circondato dall'acqua.\nLe genti che ignorano come nuotare spesso annegano.\n✦ L'anziano ti insegna a NUOTARE! ✦\nOra potrai esplorare le zone con acqua."
+            },
+            {
+              "id": "ask_training",
+              "text": "Posso allenarmi con te?",
+              "teaches_skill": "stealth",
+              "response": "Mmm, ho visto il fuoco negli occhi di un guerriero.\nAnch'io ero come te un tempo. Ti insegnerò a muoverti come un'ombra.\n✦ L'anziano ti insegna la FURTIVITÀ! ✦"
+            },
+            {
+              "id": "ask_later",
+              "text": "Parlerò con te più tardi.",
+              "response": "Va bene, straniero. Le risposte ti troveranno quando sarai pronto."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fisher",
+      "name": "Pescatore del Villaggio",
+      "location": "village",
+      "dialogs": [
+        {
+          "id": "fisher_intro",
+          "requires_act": "act_1_awakening",
+          "npc_name": "Pescatore",
+          "text": "Ehi, tu! Stai cercando qualcosa?\nIo sono il pescatore più esperto della regione.\nPasso molto tempo in acqua, in laghi e fiumi.",
+          "options": [
+            {
+              "id": "ask_diving",
+              "text": "Mi insegni a tuffarmi sott'acqua?",
+              "requires_skill": "swimming",
+              "teaches_skill": "diving",
+              "xp_reward": 100,
+              "response": "Bene! Vedo che sai già nuotare.\nOra ti insegnerò i segreti dell'immersione subacquea.\n✦ Il pescatore ti insegna l'IMMERSIONE! ✦\nOra puoi esplorare le caverne sommerse dove si nascondono grandi tesori e nemici potenti."
+            },
+            {
+              "id": "no_diving",
+              "text": "Mi insegni prima a nuotare bene?",
+              "response": "Perfetto! Ascoltami attentamente...\nPrima impara a nuotare, poi torna da me."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mountain_guide",
+      "name": "Guida Alpina",
+      "location": "mountain_path",
+      "dialogs": [
+        {
+          "id": "mountain_intro",
+          "npc_name": "Guida Alpina",
+          "text": "Salve, viaggiatore! Vedo che ti stai avventurando su questi sentieri montani.\nIo ho scalato molti picchi in mia vita.\nSe vuoi raggiungere le vette, devi imparare a arrampicarti.",
+          "options": [
+            {
+              "id": "learn_climbing",
+              "text": "Mi insegni ad arrampicarmi?",
+              "teaches_skill": "climbing",
+              "xp_reward": 150,
+              "response": "Excellente! Ascolta bene...\n✦ La Guida Alpina ti insegna l'ARRAMPICATA! ✦\nOra puoi raggiungere le vette più alte e scoprire segreti nascosti tra le rocce."
+            },
+            {
+              "id": "not_now",
+              "text": "Magari più tardi.",
+              "response": "Va bene, sarò sempre qui. Quando sarai pronto, troverai me."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "thief_master",
+      "name": "Maestro Ladro",
+      "location": "tavern",
+      "dialogs": [
+        {
+          "id": "thief_intro",
+          "requires_act": "act_2_darkness",
+          "npc_name": "Maestro Ladro",
+          "text": "Psst... tu, sì tu.\nHo visto come guardi i villaggi. Sento il potenziale in te.\nVuoi imparare l'arte del furto? È una abilità molto utile per chi sa dove guardare...",
+          "options": [
+            {
+              "id": "learn_pickpocket",
+              "text": "Mi insegni a rubare?",
+              "teaches_skill": "pickpocketing",
+              "gold_reward": 100,
+              "xp_reward": 80,
+              "response": "Ah! Un allievo che ha il coraggio di imparare.\n✦ Il Maestro Ladro ti insegna il FURTO SOTTILE! ✦\nOra puoi rubare nelle case e nei negozi. Attento però... se ti beccano!\nHo anche alcuni preziosi da venderti, come compenso per la lezione."
+            },
+            {
+              "id": "reject_thief",
+              "text": "Non voglio imparare a rubare!",
+              "response": "Bah, un altro eroe che si rifiuta. La tua perdita."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sage",
+      "name": "Saggio Mistico",
+      "location": "sky_temple",
+      "dialogs": [
+        {
+          "id": "sage_intro",
+          "requires_act": "act_4_ascension",
+          "npc_name": "Saggio Mistico",
+          "text": "Benvenuto al Tempio del Cielo, giovane guerriero.\nIo sento la magia che trabocca dal tuo corpo.\nSei pronto a comprendere i segreti dell'arcano?",
+          "options": [
+            {
+              "id": "learn_magic",
+              "text": "Insegnami la magia!",
+              "teaches_skill": "magic",
+              "xp_reward": 300,
+              "response": "✦ Il Saggio Mistico ti insegna la MAGIA! ✦\nOra puoi lanciare incantesimi potenti in battaglia.\nLa magia ti permetterà di combattere nemici elementali con maggiore efficacia.\nRicorda: ogni elemento ha una controparte!"
+            },
+            {
+              "id": "not_ready",
+              "text": "Non sono ancora pronto.",
+              "response": "La magia attende i coraggiosi. Torna quando il tuo cuore sarà più forte."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "alchemist",
+      "name": "Alchimista",
+      "location": "tavern",
+      "dialogs": [
+        {
+          "id": "alchemist_intro",
+          "requires_act": "act_3_elements",
+          "npc_name": "Alchimista",
+          "text": "Ciao, caro! Vedo che stai raccogliendo i poteri elementali.\nIo sono un alchimista, e posso insegnarti come combinare gli ingredienti per creare oggetti potenti.",
+          "options": [
+            {
+              "id": "learn_crafting",
+              "text": "Mi insegni l'alchimia?",
+              "teaches_skill": "crafting",
+              "gold_reward": 50,
+              "xp_reward": 120,
+              "response": "Perfetto! Ascolta i segreti dell'alchimia.\n✦ L'Alchimista ti insegna l'ARTIGIANATO! ✦\nOra puoi combinare gli ingredienti per creare pozioni e armi ancora più potenti!"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "healer",
+      "name": "Guaritrice",
+      "location": "village",
+      "dialogs": [
+        {
+          "id": "healer_intro",
+          "requires_act": "act_1_awakening",
+          "npc_name": "Guaritrice",
+          "text": "Casa mia è il rifugio per chi soffre. Vedo la sofferenza nei tuoi occhi.\nPuò essere quella del corpo... o dell'anima.\nVuoi imparare l'arte della guarigione?",
+          "options": [
+            {
+              "id": "learn_healing",
+              "text": "Mi insegni a guarire?",
+              "teaches_skill": "healing",
+              "xp_reward": 100,
+              "response": "Viene dal tuo cuore, la volontà di aiutare.\n✦ La Guaritrice ti insegna la GUARIGIONE! ✦\nOra le tue pozioni saranno più potenti e potrai curare ferite più gravi.\nQuesto dono può salvare vite."
+            }
+          ]
+        }
+      ]
+    }
   ]
 }

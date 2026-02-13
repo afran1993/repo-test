@@ -21,6 +21,47 @@
     {"id": "lich", "display": "Lich", "tags": ["undead","caster"], "tier": 5, "hp": 100, "atk": 12, "def": 3, "speed": 4, "element": "Arcane", "abilities": ["raise_skeleton","curse"], "drops": [{"gold": {"min":150,"max":400}, "chance":1.0}, {"item":"phantom_essence","chance":0.5}]},
     {"id": "bandit", "display": "Bandit", "tags": ["human","bandit"], "tier": 1, "hp": 22, "atk": 6, "def": 1, "speed": 5, "element": "None", "drops": [{"gold": {"min":2,"max":10}, "chance":0.9}, {"item":"bandit_mask","chance":0.05}]},
     {"id": "ogre", "display": "Ogre", "tags": ["ogre","brute"], "tier": 3, "hp": 110, "atk": 15, "def": 6, "speed": 2, "element": "None", "drops": [{"gold": {"min":30,"max":80}, "chance":0.95}, {"item":"ogre_club","chance":0.1}]},
-    {"id": "wisp", "display": "Wisp", "tags": ["fey","magic"], "tier": 1, "hp": 12, "atk": 5, "def": 0, "speed": 9, "element": "Lightning", "drops": [{"gold": {"min":1,"max":6}, "chance":0.6}, {"item":"spark_frag","chance":0.15}]}
+    {"id": "wisp", "display": "Wisp", "tags": ["fey","magic"], "tier": 1, "hp": 12, "atk": 5, "def": 0, "speed": 9, "element": "Lightning", "drops": [{"gold": {"min":1,"max":6}, "chance":0.6}, {"item":"spark_frag","chance":0.15}]},
+    {"id": "seagull", "display": "Seagull", "tags": ["bird","common"], "tier": 0, "hp": 5, "atk": 2, "def": 0, "speed": 7, "element": "None", "drops": [{"gold": {"min":1,"max":2}, "chance":0.5}]},
+    {"id": "crab", "display": "Giant Crab", "tags": ["crustacean"], "tier": 0, "hp": 8, "atk": 3, "def": 1, "speed": 2, "element": "None", "drops": [{"gold": {"min":1,"max":3}, "chance":0.6}]},
+    {"id": "fire_elemental", "display": "Fire Elemental", "tags": ["elemental","magic"], "tier": 2, "hp": 30, "atk": 8, "def": 2, "speed": 5, "element": "Fire", "resistances": {"Fire": 0.5}, "drops": [{"gold": {"min":8,"max":20}, "chance":0.7}]},
+    {"id": "fire_bat", "display": "Fire Bat", "tags": ["beast","fire"], "tier": 1, "hp": 12, "atk": 4, "def": 0, "speed": 8, "element": "Fire", "drops": [{"gold": {"min":3,"max":8}, "chance":0.7}]},
+    {"id": "lava_golem", "display": "Lava Golem", "tags": ["construct","fire"], "tier": 3, "hp": 90, "atk": 12, "def": 6, "speed": 2, "element": "Fire", "drops": [{"gold": {"min":20,"max":50}, "chance":0.9}]},
+    {"id": "water_elemental", "display": "Water Elemental", "tags": ["elemental","magic"], "tier": 2, "hp": 28, "atk": 6, "def": 3, "speed": 6, "element": "Water", "drops": [{"gold": {"min":8,"max":20}, "chance":0.7}]},
+    {"id": "giant_squid", "display": "Giant Squid", "tags": ["beast","water"], "tier": 2, "hp": 35, "atk": 7, "def": 2, "speed": 5, "element": "Water", "drops": [{"gold": {"min":10,"max":25}, "chance":0.8}]},
+    {"id": "ice_golem", "display": "Ice Golem", "tags": ["construct","water"], "tier": 2, "hp": 40, "atk": 7, "def": 4, "speed": 3, "element": "Water", "drops": [{"gold": {"min":10,"max":25}, "chance":0.8}]},
+    {"id": "ice_wolf", "display": "Ice Wolf", "tags": ["beast","water"], "tier": 1, "hp": 16, "atk": 5, "def": 2, "speed": 7, "element": "Water", "drops": [{"gold": {"min":5,"max":12}, "chance":0.7}]},
+    {"id": "earth_elemental", "display": "Earth Elemental", "tags": ["elemental","magic"], "tier": 2, "hp": 36, "atk": 8, "def": 4, "speed": 3, "element": "Earth", "drops": [{"gold": {"min":8,"max":20}, "chance":0.7}]},
+    {"id": "crystal_golem", "display": "Crystal Golem", "tags": ["construct","earth"], "tier": 2, "hp": 45, "atk": 9, "def": 5, "speed": 2, "element": "Earth", "drops": [{"gold": {"min":12,"max":30}, "chance":0.8}]},
+    {"id": "giant_beetle", "display": "Giant Beetle", "tags": ["beast","earth"], "tier": 1, "hp": 14, "atk": 5, "def": 3, "speed": 3, "element": "Earth", "drops": [{"gold": {"min":3,"max":8}, "chance":0.6}]},
+    {"id": "wind_elemental", "display": "Wind Elemental", "tags": ["elemental","magic"], "tier": 2, "hp": 28, "atk": 7, "def": 1, "speed": 7, "element": "Air", "drops": [{"gold": {"min":8,"max":20}, "chance":0.7}]},
+    {"id": "harpy", "display": "Harpy", "tags": ["beast","air"], "tier": 1, "hp": 16, "atk": 5, "def": 1, "speed": 8, "element": "Air", "drops": [{"gold": {"min":5,"max":12}, "chance":0.6}]},
+    {"id": "lightning_sprite", "display": "Lightning Sprite", "tags": ["elemental","air"], "tier": 2, "hp": 25, "atk": 9, "def": 2, "speed": 9, "element": "Lightning", "drops": [{"gold": {"min":8,"max":20}, "chance":0.8}]},
+    {"id": "shadow_wraith", "display": "Shadow Wraith", "tags": ["undead","arcane"], "tier": 2, "hp": 20, "atk": 7, "def": 1, "speed": 6, "element": "Arcane", "drops": [{"gold": {"min":10,"max":25}, "chance":0.7}]},
+    {"id": "dark_knight", "display": "Dark Knight", "tags": ["humanoid","arcane"], "tier": 3, "hp": 50, "atk": 12, "def": 6, "speed": 5, "element": "Arcane", "drops": [{"gold": {"min":30,"max":60}, "chance":0.8}]},
+    
+    {"id": "shadow_emissary", "display": "Shadow Emissary", "tags": ["boss","undead","arcane"], "tier": 4, "hp": 120, "atk": 14, "def": 5, "speed": 6, "element": "Arcane", "abilities": ["shadow_strike", "life_drain"], "boss": true, "drops": [{"gold": {"min":200,"max":400}, "chance":1.0}, {"item":"shadow_core","chance":0.8}]},
+    
+    {"id": "fire_lord", "display": "Fire Lord", "tags": ["boss","elemental","fire"], "tier": 4, "hp": 140, "atk": 16, "def": 4, "speed": 5, "element": "Fire", "abilities": ["inferno_blast", "flame_burst"], "boss": true, "drops": [{"gold": {"min":250,"max":450}, "chance":1.0}, {"item":"flame_essence","chance":0.8}]},
+    
+    {"id": "water_guardian", "display": "Water Guardian", "tags": ["boss","elemental","water"], "tier": 4, "hp": 130, "atk": 13, "def": 6, "speed": 5, "element": "Water", "abilities": ["tidal_wave", "freeze_solid"], "boss": true, "drops": [{"gold": {"min":250,"max":450}, "chance":1.0}, {"item":"aqua_essence","chance":0.8}]},
+    
+    {"id": "sky_warden", "display": "Sky Warden", "tags": ["boss","elemental","air"], "tier": 4, "hp": 120, "atk": 15, "def": 3, "speed": 8, "element": "Air", "abilities": ["hurricane_strike", "lightning_bolt"], "boss": true, "drops": [{"gold": {"min":250,"max":450}, "chance":1.0}, {"item":"wind_essence","chance":0.8}]},
+    
+    {"id": "earth_titan", "display": "Earth Titan", "tags": ["boss","elemental","earth"], "tier": 4, "hp": 160, "atk": 17, "def": 8, "speed": 3, "element": "Earth", "abilities": ["earthquake", "stone_prison"], "boss": true, "drops": [{"gold": {"min":250,"max":450}, "chance":1.0}, {"item":"earth_essence","chance":0.8}]},
+    
+    {"id": "sky_dragon", "display": "Drago Celeste", "tags": ["boss","dragon","air"], "tier": 5, "hp": 200, "atk": 20, "def": 6, "speed": 7, "element": "Air", "abilities": ["divine_blessing", "sky_rage", "legendary_breath"], "boss": true, "drops": [{"gold": {"min":400,"max":700}, "chance":1.0}, {"item":"dragon_heart","chance":0.9}]},
+    
+    {"id": "supreme_lich", "display": "Lich Supremo", "tags": ["boss","undead","arcane","final_boss"], "tier": 6, "hp": 250, "atk": 22, "def": 5, "speed": 6, "element": "Arcane", "abilities": ["reality_warp", "soul_drain", "curse_of_death", "summon_minions"], "boss": true, "final_boss": true, "drops": [{"gold": {"min":1000,"max":2000}, "chance":1.0}, {"item":"lich_crown","chance":0.95}]},
+    
+    {"id": "dimensional_wraith", "display": "Dimensional Wraith", "tags": ["endgame","arcane","spirit"], "tier": 5, "hp": 180, "atk": 18, "def": 4, "speed": 7, "element": "Arcane", "abilities": ["phase_shift", "void_strike", "spatial_rupture"], "endgame": true, "drops": [{"gold": {"min":500,"max":1000}, "chance":1.0}, {"item":"void_essence","chance":0.6}]},
+    
+    {"id": "infernal_titan", "display": "Infernal Titan", "tags": ["endgame","fire","brute"], "tier": 5, "hp": 220, "atk": 21, "def": 7, "speed": 4, "element": "Fire", "abilities": ["meteor_shower", "hellfire_surge", "infernal_roar"], "endgame": true, "drops": [{"gold": {"min":500,"max":1000}, "chance":1.0}, {"item":"infernal_core","chance":0.6}]},
+    
+    {"id": "frost_leviathan", "display": "Frost Leviathan", "tags": ["endgame","water","boss"], "tier": 5, "hp": 210, "atk": 19, "def": 8, "speed": 5, "element": "Water", "abilities": ["absolute_zero", "ice_storm", "glacial_prison"], "endgame": true, "drops": [{"gold": {"min":500,"max":1000}, "chance":1.0}, {"item":"frost_core","chance":0.6}]},
+    
+    {"id": "tempest_sovereign", "display": "Tempest Sovereign", "tags": ["endgame","air","caster"], "tier": 5, "hp": 190, "atk": 20, "def": 5, "speed": 9, "element": "Air", "abilities": ["storm_apocalypse", "lightning_cascade", "wind_severance"], "endgame": true, "drops": [{"gold": {"min":500,"max":1000}, "chance":1.0}, {"item":"storm_core","chance":0.6}]},
+    
+    {"id": "nature_colossus", "display": "Nature Colossus", "tags": ["endgame","earth","titan"], "tier": 5, "hp": 240, "atk": 19, "def": 9, "speed": 3, "element": "Earth", "abilities": ["earthquake_fury", "root_entanglement", "growth_acceleration"], "endgame": true, "drops": [{"gold": {"min":500,"max":1000}, "chance":1.0}, {"item":"nature_core","chance":0.6}]}
   ]
 }
