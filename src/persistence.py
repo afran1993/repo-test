@@ -20,6 +20,8 @@ def save_game(player, path="save.json"):
         "potions": player.potions,
         "equipped_weapon": player.equipped_weapon,
         "accessories": player.accessories,
+        "current_location": player.current_location,
+        "language": player.language,
     }
     with open(path, "w") as f:
         json.dump(data, f)
@@ -46,6 +48,8 @@ def load_game(path="save.json"):
     p.potions = data.get("potions", {})
     p.equipped_weapon = data.get("equipped_weapon", None)
     p.accessories = data.get("accessories", {"ring": None, "necklace": None, "amulet": None, "bracelet": None})
+    p.current_location = data.get("current_location", "beach")
+    p.language = data.get("language", "it")
     print("Partita caricata.")
     return p
 

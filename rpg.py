@@ -9,6 +9,8 @@ from src.combat import CombatEngine, create_fight_with_engine, init_abilities_re
 from src.players import Player
 from src.persistence import save_game, load_game, hospital
 from src.menus import potion_menu, equip_weapon_menu, accessories_menu, shop, open_treasure
+from src.i18n import i18n
+from src.game_logic import choose_language, game_loop_map
 from src.story import (
     check_story_milestone, get_story_status, get_boss_for_location,
     get_current_main_quest, update_story_progress, teach_skill, has_skill,
@@ -33,7 +35,7 @@ ENEMY_EMOJIS = {
     "elemental": "⚡", "fire": "🔥", "water": "💧", "wind": "🌪️", "earth": "🪨",
     "construct": "🤖", "beast": "🐻", "undead": "💀", "spirit": "👻", "troll": "👹",
     "golem": "🪨", "serpent": "🐍", "chimera": "🦁", "lich": "💀", "bandit": "🗡️",
-    "sprite": "✨", "wisp": "💫", "beetle": "🐞", "seagull": "🐦"
+    "sprite": "✨", "wisp": "💫", "beetle": "🐞", "seagull": "🐦", "scorpion": "🦂", "boar": "🐗"
 }
 
 def load_data():
@@ -600,6 +602,86 @@ def fight(player, enemy, current_location=None, is_boss=False):
             return False
 
 
+def ask_battle_count():
+    """Chiede al giocatore quanti nemici vuole combattere."""
+    print("\nQuanti nemici vuoi combattere di fila? (inserisci un numero, ad es: 1, 5, 10, 1000)")
+    try:
+        count = int(input("-> ").strip())
+        if count > 0:
+            return count
+        else:
+            print("Inserisci un numero positivo.")
+            return 1
+    except ValueError:
+        print("Numero non valido, combatterai 1 nemico.")
+        return 1
+
+
+def execute_multiple_battles(player, location, is_boss=False):
+    """Esegue più combattimenti in sequenza."""
+    battle_count = ask_battle_count()
+    battles_won = 0
+    
+    for i in range(battle_count):
+        if not player.is_alive():
+            break
+        
+        # Se è un boss, combatti solo il boss
+        if is_boss:
+            boss = get_boss_for_location(player.current_location)
+            if not boss:
+                print("Il boss non è qui!")
+                break
+            
+            print(f"\n[Boss Battle {i+1}/{battle_count}]")
+            print(f"Incontri: {boss.name}!")
+            time.sleep(0.5)
+            
+            result = fight(player, boss, location, is_boss=True)
+            if result:
+                print(f"\n✦✦✦ HAI SCONFITTO IL BOSS! ✦✦✦")
+                print(f"{boss.name} soccombe!")
+                print(f"Ottieni {boss.xp_reward * 2} XP e {boss.gold_reward * 2} gold!")
+                player.gold += boss.xp_reward * 2
+                player.gain_xp(boss.xp_reward * 2)
+                update_story_progress(player)
+                battles_won += 1
+            else:
+                print("Sei dovuto fuggire dal boss...")
+                break
+        else:
+            # Combatti nemici normali
+            enemy = location.get_random_enemy()
+            if not enemy:
+                print("🚫 Non trovi nemici qui.")
+                break
+            
+            print(f"\n[Battaglia {i+1}/{battle_count}] {enemy.name} appare!")
+            time.sleep(0.3)
+            
+            result = fight(player, enemy, location)
+            if result:
+                battles_won += 1
+                print(f"\n✨ Hai sconfitto il {enemy.name}! ✨")
+                print(f"⭐ Ottieni {enemy.xp_reward} XP e {enemy.gold_reward} gold.")
+                
+                # Se è il primo nemico o ogni 5 nemici, mostra i progressi
+                if (i + 1) % 5 == 0 or i == 0:
+                    print(f"\n📊 Progressi: {battles_won}/{i+1} vittorie")
+                    print(f"Totale XP: {player.xp}, Totale Gold: {player.gold}")
+            else:
+                print("💨 Sei dovuto fuggire o sconfitto...")
+                break
+        
+        time.sleep(0.5)
+    
+    print(f"\n{'='*60}")
+    print(f"📊 RISULTATI BATTAGLIA: {battles_won} vittorie su {battle_count}")
+    print(f"Livello: {player.level}, XP: {player.xp}/{player.level*12}")
+    print(f"Gold totale: {player.gold}, HP: {player.hp}/{player.get_total_max_hp()}")
+    print(f"{'='*60}\n")
+
+
 def game_loop_map(player):
     """Nuovo game loop con sistema di mappa e storia principale."""
     print("\n" + "="*60)
@@ -641,43 +723,11 @@ def game_loop_map(player):
             if boss:
                 quest = get_current_main_quest(player)
                 if quest and quest.get("boss_encounter"):
-                    print(f"\n!!! BOSS FIGHT !!!")
-                    print(f"Incontri: {boss.name}!")
-                    time.sleep(1)
-                    result = fight(player, boss, location, is_boss=True)
-                    if result:
-                        print(f"\n✦✦✦ HAI SCONFITTO IL BOSS! ✦✦✦")
-                        print(f"{boss.name} soccombe!")
-                        print(f"Ottieni {boss.xp_reward * 2} XP e {boss.gold_reward * 2} gold!")
-                        player.gold += boss.gold_reward * 2
-                        player.gain_xp(boss.xp_reward * 2)
-                        update_story_progress(player)
-                    else:
-                        print("Sei dovuto fuggire dal boss...")
+                    execute_multiple_battles(player, location, is_boss=True)
                 else:
-                    enemy = location.get_random_enemy()
-                    if enemy:
-                        result = fight(player, enemy, location)
-                        if result:
-                            print(f"\n✨ Hai sconfitto il {enemy.name}! ✨")
-                            print(f"⭐ Ottieni {enemy.xp_reward} XP e {enemy.gold_reward} gold.")
-                            player.gold += enemy.gold_reward
-                            player.gain_xp(enemy.xp_reward)
-                        else:
-                            print("💨 Sei dovuto fuggire...")
+                    execute_multiple_battles(player, location, is_boss=False)
             else:
-                enemy = location.get_random_enemy()
-                if enemy:
-                    result = fight(player, enemy, location)
-                    if result:
-                        print(f"\n✨ Hai sconfitto il {enemy.name}! ✨")
-                        print(f"⭐ Ottieni {enemy.xp_reward} XP e {enemy.gold_reward} gold.")
-                        player.gold += enemy.gold_reward
-                        player.gain_xp(enemy.xp_reward)
-                    else:
-                        print("💨 Sei dovuto fuggire...")
-                else:
-                    print("🚫 Non trovi nemici qui.")
+                execute_multiple_battles(player, location, is_boss=False)
         
         elif cmd == "2":
             # Forzieri
@@ -899,6 +949,20 @@ def fight_auto(player, enemy):
         print("Demo: sei stato sconfitto...")
         hospital(player)
 
+def choose_language():
+    """Chiede al giocatore quale lingua usare."""
+    print("\n" + "="*60)
+    print("SCEGLI LA LINGUA / CHOOSE LANGUAGE")
+    print("="*60)
+    print("1) Italiano")
+    print("2) English")
+    print("="*60 + "\n")
+    
+    choice = input("Scelta / Choice (1 o 2): ").strip()
+    if choice == "2":
+        return "en"
+    else:
+        return "it"
 
 if __name__ == "__main__":
     import argparse
@@ -929,12 +993,22 @@ if __name__ == "__main__":
             if choice == "1":
                 player = load_game()
                 if player:
-                    game_loop_map(player)
+                    i18n.set_locale(player.language)
+                    game_loop_map(player, fight, get_location, get_boss_for_location, 
+                                get_enemy_emoji, LOCATIONS_DATA, NPCS_DATA)
             else:
-                name = input("Come ti chiami, avventuriero? ").strip() or "Eroe"
+                language = choose_language()
+                i18n.set_locale(language)
+                name = input("Come ti chiami, avventuriero? " if language == "it" else "What is your name, adventurer? ").strip() or ("Eroe" if language == "it" else "Hero")
                 player = Player(name)
-                game_loop_map(player)
+                player.language = language
+                game_loop_map(player, fight, get_location, get_boss_for_location, 
+                            get_enemy_emoji, LOCATIONS_DATA, NPCS_DATA)
         else:
-            name = input("Come ti chiami, avventuriero? ").strip() or "Eroe"
+            language = choose_language()
+            i18n.set_locale(language)
+            name = input("Come ti chiami, avventuriero? " if language == "it" else "What is your name, adventurer? ").strip() or ("Eroe" if language == "it" else "Hero")
             player = Player(name)
-            game_loop_map(player)
+            player.language = language
+            game_loop_map(player, fight, get_location, get_boss_for_location, 
+                        get_enemy_emoji, LOCATIONS_DATA, NPCS_DATA)

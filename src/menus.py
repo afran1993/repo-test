@@ -1,6 +1,7 @@
 """Menu functions for player interactions."""
 
 import time
+import random
 
 
 def potion_menu(player):
@@ -96,7 +97,6 @@ def shop(player):
 
 def open_treasure(player, location):
     """Apre un forziere in una location."""
-    # ITEMS_DATA accessed as global
     if not location.treasure:
         print("Non ci sono forzieri qui.")
         return
@@ -117,9 +117,31 @@ def open_treasure(player, location):
             time.sleep(0.3)
             
             drops = treasure.get('drops', [])
+            found_anything = False
+            
             for drop_item in drops:
-                # TODO: Handle treasure drops with ITEMS_DATA
-                pass
+                # Controlla se il drop è oro
+                if "gold" in drop_item:
+                    if random.random() < drop_item.get("chance", 1.0):
+                        gold_data = drop_item["gold"]
+                        gold_amount = random.randint(gold_data.get("min", 1), gold_data.get("max", 5))
+                        player.gold += gold_amount
+                        print(f"✨ Hai trovato {gold_amount} oro!")
+                        found_anything = True
+                
+                # Controlla se il drop è un item
+                if "item" in drop_item:
+                    if random.random() < drop_item.get("chance", 1.0):
+                        item_name = drop_item["item"]
+                        print(f"✨ Hai trovato {item_name}!")
+                        # Aggiungi l'item all'inventario o gestiscilo come necessario
+                        if not isinstance(player.inventory, list):
+                            player.inventory = []
+                        player.inventory.append({"id": item_name, "name": item_name})
+                        found_anything = True
+            
+            if not found_anything:
+                print("Il forziere era vuoto...")
             
             # Rimuovi il forziere (può essere aperto solo una volta per partita)
             location.treasure.pop(idx)

@@ -7,8 +7,9 @@
       "difficulty": 0,
       "element": "None",
       "enemies": [
-        {"id": "seagull", "chance": 0.8, "count": "1-2"},
-        {"id": "crab", "chance": 0.2, "count": "1"}
+        {"id": "seagull", "chance": 0.6, "count": "1-2"},
+        {"id": "crab", "chance": 0.2, "count": "1"},
+        {"id": "scorpion", "chance": 0.2, "count": "1"}
       ],
       "terrain": "sand",
       "connections": {
@@ -65,9 +66,10 @@
       "difficulty": 1,
       "element": "Earth",
       "enemies": [
-        {"id": "wild_wolf", "chance": 0.5, "count": "1-2"},
+        {"id": "wild_wolf", "chance": 0.4, "count": "1-2"},
         {"id": "goblin", "chance": 0.3, "count": "1"},
-        {"id": "giant_beetle", "chance": 0.2, "count": "1"}
+        {"id": "giant_beetle", "chance": 0.2, "count": "1"},
+        {"id": "wild_boar", "chance": 0.1, "count": "1"}
       ],
       "terrain": "forest",
       "connections": {
@@ -86,10 +88,11 @@
       "difficulty": 2,
       "element": "Earth",
       "enemies": [
-        {"id": "wild_wolf", "chance": 0.4, "count": "1-2"},
+        {"id": "wild_wolf", "chance": 0.35, "count": "1-2"},
         {"id": "skeleton_warrior", "chance": 0.3, "count": "1"},
         {"id": "ghost", "chance": 0.2, "count": "1"},
-        {"id": "crystal_golem", "chance": 0.1, "count": "1"}
+        {"id": "crystal_golem", "chance": 0.1, "count": "1"},
+        {"id": "wild_boar", "chance": 0.05, "count": "1"}
       ],
       "terrain": "forest",
       "connections": {

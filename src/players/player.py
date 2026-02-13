@@ -54,6 +54,9 @@ class Player:
         # Posizione sulla mappa
         self.current_location = "beach"
         
+        # Lingua selezionata
+        self.language = "it"
+        
         # Sistema di storia principale
         self.story_progress = "act_1_awakening"
         self.story_stage = 0
@@ -188,12 +191,5 @@ class Player:
 
     def status(self):
         """Ritorna lo status del giocatore."""
-        weapon_str = f" [{self.equipped_weapon['name']}]" if self.equipped_weapon else " [Pugno]"
-        acc_str = ""
-        for slot, acc in self.accessories.items():
-            if acc:
-                acc_str += f" {acc['name']}"
-        total_atk = self.get_total_atk()
-        total_dex = self.get_total_dex()
-        total_potions = sum(self.potions.values())
-        return f"{self.name} - LV {self.level}  HP {self.hp}/{self.get_total_max_hp()}  ATK {total_atk}  DEX {total_dex}  XP {self.xp}/{self.level*12}  Gold {self.gold}  Potions 🧪{total_potions}{weapon_str}{acc_str}"
+        from src.color_manager import format_status
+        return format_status(self)
