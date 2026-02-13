@@ -1310,21 +1310,21 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(description="RPG Game")
-    load_data()  # Carica tutti i dati (locations, enemies, items, quests, npcs)
 
+    # Aggiungi i flag prima di fare parse_args()
     parser.add_argument(
         '--demo', 
-        action='store_true',  # se presente diventa True, altrimenti False
+        action='store_true',  
         help='Esegui il gioco in modalità demo'
     )
 
     args = parser.parse_args()
-    
-    parser = argparse.ArgumentParser()
-    args = parser.parse_args()
+
+    load_data()  # Carica tutti i dati (locations, enemies, items, quests, npcs)
+
     if args.demo:
         demo()
     else:
         name = input("Come ti chiami, avventuriero? ").strip() or "Eroe"
         player = Player(name)
-        game_loop_map(player)  # Usa il nuovo game loop con mappa
+        game_loop_map(player)
