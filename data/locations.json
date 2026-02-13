@@ -28,8 +28,9 @@
       "element": "Water",
       "enemies": [
         {"id": "slime_blue", "chance": 0.5, "count": "1-2"},
-        {"id": "ice_wolf", "chance": 0.3, "count": "1"},
-        {"id": "giant_squid", "chance": 0.2, "count": "1"}
+        {"id": "ice_wolf", "chance": 0.25, "count": "1"},
+        {"id": "giant_squid", "chance": 0.15, "count": "1"},
+        {"id": "deep_sludge", "chance": 0.1, "count": "1"}
       ],
       "terrain": "water",
       "connections": {
@@ -47,9 +48,10 @@
       "difficulty": 2,
       "element": "Water",
       "enemies": [
-        {"id": "ice_golem", "chance": 0.5, "count": "1"},
-        {"id": "giant_squid", "chance": 0.4, "count": "1"},
-        {"id": "water_elemental", "chance": 0.1, "count": "1"}
+        {"id": "ice_golem", "chance": 0.4, "count": "1"},
+        {"id": "giant_squid", "chance": 0.3, "count": "1"},
+        {"id": "water_elemental", "chance": 0.15, "count": "1"},
+        {"id": "deep_sea_angler", "chance": 0.15, "count": "1"}
       ],
       "terrain": "cave",
       "connections": {
@@ -168,9 +170,10 @@
       "difficulty": 2.5,
       "element": "Air",
       "enemies": [
-        {"id": "harpy", "chance": 0.5, "count": "1-2"},
-        {"id": "wind_elemental", "chance": 0.3, "count": "1"},
-        {"id": "stone_golem", "chance": 0.2, "count": "1"}
+        {"id": "harpy", "chance": 0.4, "count": "1-2"},
+        {"id": "wind_elemental", "chance": 0.25, "count": "1"},
+        {"id": "stone_golem", "chance": 0.2, "count": "1"},
+        {"id": "wind_stalker", "chance": 0.15, "count": "1"}
       ],
       "terrain": "mountain",
       "connections": {
@@ -188,9 +191,10 @@
       "difficulty": 3,
       "element": "Air",
       "enemies": [
-        {"id": "lightning_sprite", "chance": 0.5, "count": "1"},
-        {"id": "harpy", "chance": 0.3, "count": "1-2"},
-        {"id": "shadow_wraith", "chance": 0.2, "count": "1"}
+        {"id": "lightning_sprite", "chance": 0.35, "count": "1"},
+        {"id": "harpy", "chance": 0.25, "count": "1-2"},
+        {"id": "shadow_wraith", "chance": 0.2, "count": "1"},
+        {"id": "storm_raven", "chance": 0.2, "count": "1"}
       ],
       "terrain": "temple",
       "connections": {
@@ -207,9 +211,10 @@
       "difficulty": 2,
       "element": "Earth",
       "enemies": [
-        {"id": "stone_golem", "chance": 0.4, "count": "1"},
+        {"id": "stone_golem", "chance": 0.35, "count": "1"},
         {"id": "crystal_golem", "chance": 0.3, "count": "1"},
-        {"id": "giant_beetle", "chance": 0.3, "count": "1-2"}
+        {"id": "giant_beetle", "chance": 0.2, "count": "1-2"},
+        {"id": "earth_borer", "chance": 0.15, "count": "1"}
       ],
       "terrain": "cave",
       "connections": {
@@ -247,9 +252,10 @@
       "difficulty": 2.5,
       "element": "Fire",
       "enemies": [
-        {"id": "fire_bat", "chance": 0.5, "count": "1-2"},
+        {"id": "fire_bat", "chance": 0.35, "count": "1-2"},
         {"id": "lava_golem", "chance": 0.3, "count": "1"},
-        {"id": "fire_elemental", "chance": 0.2, "count": "1"}
+        {"id": "fire_elemental", "chance": 0.2, "count": "1"},
+        {"id": "flame_newt", "chance": 0.15, "count": "1"}
       ],
       "terrain": "volcano",
       "connections": {
@@ -286,9 +292,10 @@
       "difficulty": 3,
       "element": "Arcane",
       "enemies": [
-        {"id": "shadow_wraith", "chance": 0.5, "count": "1"},
+        {"id": "shadow_wraith", "chance": 0.4, "count": "1"},
         {"id": "dark_knight", "chance": 0.3, "count": "1"},
-        {"id": "lich", "chance": 0.2, "count": "1"}
+        {"id": "lich", "chance": 0.2, "count": "1"},
+        {"id": "arcane_wisp_greater", "chance": 0.1, "count": "1"}
       ],
       "terrain": "temple",
       "connections": {},

@@ -278,13 +278,6 @@
     {"id": "dq_estark_shade", "display": "Shade of Estark", "tags": ["demon", "boss"], "tier": 6, "hp": 1500, "atk": 65, "def": 50, "speed": 8, "element": "None", "abilities": ["dual_slash", "gigagash"], "drops": [{"gold": {"min": 10000, "max": 25000}, "chance": 1.0}]},
     {"id": "risen_titan_fire", "display": "Fire Titan", "tags": ["titan", "boss"], "tier": 6, "hp": 2000, "atk": 80, "def": 60, "speed": 3, "element": "Fire", "abilities": ["magma_wave", "world_shatter"], "drops": [{"gold": {"min": 20000, "max": 50000}, "chance": 1.0}]},
     {"id": "lod_melbu_frahma_ghost", "display": "Melbu Frahma Spirit", "tags": ["god", "boss"], "tier": 6, "hp": 2500, "atk": 90, "def": 55, "speed": 9, "element": "Arcane", "abilities": ["dimensional_rip", "god_slayer"], "drops": [{"gold": {"min": 50000, "max": 100000}, "chance": 1.0}]},
-    Ottima scelta! Il mondo di Skyrim si presta perfettamente, insieme a quelli di Dark Souls, The Witcher e Monster Hunter. Ho bilanciato le statistiche per riflettere la pericolosità di queste creature (ad esempio, la letalità dei mostri di Dark Souls e la resistenza di quelli di Monster Hunter).
-
-Ecco altri 100 nemici (ID 301-400) pronti per il tuo database:
-JSON
-
-{
-  "enemies": [
     {"id": "sky_draugr_overlord", "display": "Draugr Overlord", "tags": ["undead", "warrior"], "tier": 3, "hp": 120, "atk": 18, "def": 12, "speed": 4, "element": "Ice", "abilities": ["unrelenting_force"], "drops": [{"gold": {"min": 50, "max": 150}, "chance": 1.0}]},
     {"id": "ds_bonewheel_skeleton", "display": "Bonewheel Skeleton", "tags": ["undead", "fast"], "tier": 2, "hp": 30, "atk": 25, "def": 2, "speed": 15, "element": "None", "abilities": ["wheel_charge"], "drops": [{"gold": {"min": 20, "max": 60}, "chance": 0.7}]},
     {"id": "tw_leshen", "display": "Leshen", "tags": ["spirit", "boss"], "tier": 4, "hp": 220, "atk": 24, "def": 8, "speed": 5, "element": "Earth", "abilities": ["root_entwine", "summon_wolves"], "drops": [{"gold": {"min": 300, "max": 700}, "chance": 1.0}]},

@@ -8,6 +8,8 @@ from src.story import (
 )
 from src.menus import equip_weapon_menu, accessories_menu, open_treasure
 from src.persistence import save_game
+from src.i18n import i18n
+from src.map_system import print_map, show_world_map, list_locations, navigate_location
 
 
 def choose_language():
@@ -199,30 +201,57 @@ def game_loop_map(player, fight_fn, get_location_fn, get_boss_fn, get_enemy_emoj
             print(f"Riposi e recuperi {heal} HP.")
         
         elif cmd == "8":
-            # Mappa - mostra connessioni
-            print("\nConnessioni disponibili:")
-            for direction, loc_id in location.connections.items():
-                # Controlla se puoi accedere a questa location
-                next_location = get_location_fn(loc_id)
-                can_access, error_msg = check_location_access(player, loc_id, next_location.element if next_location else None)
-                
-                if can_access:
-                    print(f"  {direction}: {loc_id}")
-                else:
-                    print(f"  {direction}: {loc_id} [BLOCCATO: {error_msg}]")
+            # Mappa interattiva
+            print("\n" + "="*60)
+            print(i18n.t('map.menu', 'MAPPA - COSA VUOI FARE?'))
+            print("="*60)
+            print("1) Mappa attuale (connessioni)")
+            print("2) Mappa del mondo (tutte le locazioni)")
+            print("3) Elenco tutti i luoghi")
+            print("4) Naviga verso una locazione")
+            print("5) Indietro")
+            print("="*60)
             
-            next_loc = input("Vai verso: ").strip().lower()
-            if next_loc in location.connections:
-                next_location = get_location_fn(location.connections[next_loc])
-                can_access, error_msg = check_location_access(player, location.connections[next_loc], next_location.element)
+            map_choice = input("-> ").strip()
+            
+            if map_choice == "1":
+                # Mappa attuale con connessioni
+                locations_by_id = {loc['id']: loc for loc in LOCATIONS_DATA['locations']}
+                print_map(player.current_location, locations_by_id)
+            
+            elif map_choice == "2":
+                # Mappa mondo completa
+                locations_by_id = {loc['id']: loc for loc in LOCATIONS_DATA['locations']}
+                show_world_map()
+            
+            elif map_choice == "3":
+                # Elenco di tutte le locazioni
+                locations_by_id = {loc['id']: loc for loc in LOCATIONS_DATA['locations']}
+                list_locations(locations_by_id)
+            
+            elif map_choice == "4":
+                # Navigazione con validazione
+                next_loc = input(i18n.t('map.navigate', "Verso quale direzione? (nord/south/est/ovest/east/west): ")).strip().lower()
                 
-                if can_access:
-                    player.current_location = location.connections[next_loc]
-                    print(f"Ti sposti verso {next_loc}...")
+                if next_loc in location.connections:
+                    next_location = get_location_fn(location.connections[next_loc])
+                    can_access, error_msg = check_location_access(player, location.connections[next_loc], next_location.element)
+                    
+                    if can_access:
+                        player.current_location = location.connections[next_loc]
+                        print(f"\n🚶 Ti sposti verso {next_loc}...")
+                        time.sleep(1)
+                    else:
+                        print(f"\n❌ Non puoi andare: {error_msg}")
                 else:
-                    print(f"Non puoi andare there: {error_msg}")
+                    available = ", ".join(location.connections.keys())
+                    print(f"\n❌ Direzione non valida. Disponibili: {available}")
+            
+            elif map_choice == "5":
+                pass  # Torna al menu
+            
             else:
-                print("Direzione non valida.")
+                print("Opzione non valida.")
         
         elif cmd == "9":
             # Mostra abilità
