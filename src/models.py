@@ -78,15 +78,33 @@ class Enemy:
         self.atk = enemy_data.get("atk", 3)
         self.def_ = enemy_data.get("def", 0)
         self.element = enemy_data.get("element", "None")
-        self.xp_reward = enemy_data.get("tier", 1) * 10
-        self.gold_reward = random.randint(
-            enemy_data.get("tier", 1) * 2,
-            enemy_data.get("tier", 1) * 5
-        )
+        self.tier = enemy_data.get("tier", 1)
         
-        # Optional fields
+        # XP and gold rewards
+        self.xp_reward = self.tier * 10
+        self.gold_reward = random.randint(self.tier * 2, self.tier * 5)
+        
+        # Advanced enemy properties
+        self.speed = enemy_data.get("speed", 5)  # Combat speed (evasion/turn order)
         self.tags = enemy_data.get("tags", [])
         self.abilities = enemy_data.get("abilities", [])
+        self.behaviors = enemy_data.get("behaviors", [])
+        
+        # Elemental resistances/immunities/vulnerabilities
+        self.resistances: Dict[str, float] = enemy_data.get("resistances", {})  # e.g., {"Fire": 0.5}
+        self.immunities: List[str] = enemy_data.get("immunities", [])  # e.g., ["Poison", "Physical"]
+        self.vulnerabilities: List[str] = enemy_data.get("vulnerabilities", [])  # e.g., ["Holy", "Lightning"]
+        
+        # Special mechanics
+        self.regeneration = enemy_data.get("regeneration", 0)  # HP recovered per turn
+        
+        # Boss/endgame flags
+        self.is_boss = enemy_data.get("boss", False)
+        self.is_final_boss = enemy_data.get("final_boss", False)
+        self.is_endgame = enemy_data.get("endgame", False)
+        
+        # Item drops (probabilistic)
+        self.drops = enemy_data.get("drops", [])  # List of {"gold": {...}, "chance": 0.5} or {"item": "...", "chance": 0.3}
     
     def is_alive(self) -> bool:
         """Check if enemy is alive.
@@ -102,16 +120,89 @@ class Enemy:
         Returns:
             String description of enemy
         """
-        return f"{self.name} ({self.element}) - HP {self.hp}/{self.max_hp}"
+        status = f"{self.name} ({self.element}) - HP {self.hp}/{self.max_hp}"
+        
+        # Add special status indicators
+        if self.is_final_boss:
+            status += " [FINAL BOSS]"
+        elif self.is_boss:
+            status += " [BOSS]"
+        elif self.is_endgame:
+            status += " [ENDGAME]"
+        
+        return status
     
     def take_damage(self, damage: float) -> None:
-        """Take damage.
+        """Take damage with resistance/immunity calculations.
         
         Args:
             damage: Damage amount
         """
         self.hp -= damage
         logger.debug(f"{self.name} takes {damage} damage, hp now {self.hp}")
+    
+    def get_resistance(self, element: str) -> float:
+        """Get damage multiplier for element (resistance/vulnerability).
+        
+        Args:
+            element: Element type (e.g., "Fire", "Ice")
+        
+        Returns:
+            Damage multiplier (0.5 = 50% damage, 2.0 = 200% damage)
+        """
+        # Check immunity first (immune = 0 damage)
+        if element in self.immunities:
+            return 0.0
+        
+        # Check vulnerability (takes extra damage)
+        if element in self.vulnerabilities:
+            return 1.5  # 150% damage
+        
+        # Check resistance
+        return self.resistances.get(element, 1.0)
+    
+    def regenerate(self) -> None:
+        """Apply regeneration at end of turn."""
+        if self.regeneration > 0:
+            self.hp = min(self.max_hp, self.hp + self.regeneration)
+            logger.debug(f"{self.name} regenerated {self.regeneration} HP")
+    
+    def roll_drops(self) -> Dict[str, Any]:
+        """Calculate which drops this enemy will give on defeat.
+        
+        Returns:
+            Dictionary with "gold" and "items" keys
+        """
+        drops_result = {"gold": 0, "items": []}
+        
+        for drop_entry in self.drops:
+            # Check if drop happens
+            if random.random() >= drop_entry.get("chance", 1.0):
+                continue
+            
+            # Gold drop
+            if "gold" in drop_entry:
+                gold_data = drop_entry["gold"]
+                amount = random.randint(gold_data["min"], gold_data["max"])
+                drops_result["gold"] += amount
+            
+            # Item drop
+            if "item" in drop_entry:
+                item_id = drop_entry["item"]
+                drops_result["items"].append(item_id)
+        
+        return drops_result
+    
+    def has_ability(self, ability_id: str) -> bool:
+        """Check if enemy knows an ability.
+        
+        Args:
+            ability_id: ID of the ability
+        
+        Returns:
+            True if enemy has this ability
+        """
+        return ability_id in self.abilities
 
 
 class Location:
