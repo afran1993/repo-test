@@ -3,7 +3,6 @@
     {"id": "slime_red", "display": "Red Slime", "tags": ["slime","common"], "tier": 1, "hp": 8, "atk": 2, "def": 0, "speed": 3, "element": "None"},
     {"id": "slime_blue", "display": "Blue Slime", "tags": ["slime","common"], "tier": 1, "hp": 9, "atk": 2, "def": 0, "speed": 3, "element": "Water"},
     {"id": "slime_green", "display": "Green Slime", "tags": ["slime","common"], "tier": 1, "hp": 10, "atk": 2, "def": 1, "speed": 3, "element": "Earth"},
-    {"id": "goblin", "display": "Goblin", "tags": ["humanoid","pack"], "tier": 1, "hp": 14, "atk": 4, "def": 1, "speed": 6, "element": "None", "behaviors": ["steal"]},
     {"id": "goblin", "display": "Goblin", "tags": ["humanoid","pack"], "tier": 1, "hp": 14, "atk": 4, "def": 1, "speed": 6, "element": "None", "behaviors": ["steal"], "drops": [{"gold": {"min":2,"max":6}, "chance": 0.9}, {"item":"potion_small","chance":0.05}]},
     {"id": "stone_golem", "display": "Stone Golem", "tags": ["construct"], "tier": 3, "hp": 80, "atk": 10, "def": 8, "speed": 2, "element": "Earth", "vulnerabilities": ["Arcane"], "drops": [{"gold": {"min":10,"max":30}, "chance":0.9}, {"item":"stone_fragment","chance":0.3}]},
     {"id": "skeleton_warrior", "display": "Skeleton Warrior", "tags": ["undead"], "tier": 2, "hp": 20, "atk": 6, "def": 2, "speed": 4, "element": "None", "immunities": ["Poison"], "vulnerabilities": ["Holy"], "drops": [{"gold": {"min":3,"max":8}, "chance":0.8}, {"item":"bone_fragment","chance":0.4}]},

@@ -27,7 +27,8 @@ def scan_items(mapping):
     path = os.path.join(DATA_DIR, 'items.json')
     if not os.path.exists(path):
         return
-    items = json.load(open(path, 'r', encoding='utf-8'))
+    with open(path, 'r', encoding='utf-8') as f:
+        items = json.load(f)
     for it in items:
         iid = it.get('id')
         if not iid:
@@ -42,7 +43,8 @@ def scan_archetypes(mapping):
     path = os.path.join(DATA_DIR, 'archetypes.json')
     if not os.path.exists(path):
         return
-    data = json.load(open(path, 'r', encoding='utf-8'))
+    with open(path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
     for k,v in data.items():
         if not v.get('key') and v.get('display'):
             add(mapping, f"class.{k}.name", v.get('display'))
@@ -52,7 +54,8 @@ def scan_regions(mapping):
     path = os.path.join(DATA_DIR, 'regions.json')
     if not os.path.exists(path):
         return
-    data = json.load(open(path, 'r', encoding='utf-8'))
+    with open(path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
     for r in data.get('regions', []):
         rid = r.get('id')
         if r.get('name') and not r.get('name_key'):
@@ -69,7 +72,8 @@ def scan_npcs(mapping):
     path = os.path.join(DATA_DIR, 'npcs.json')
     if not os.path.exists(path):
         return
-    data = json.load(open(path, 'r', encoding='utf-8'))
+    with open(path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
     for n in data.get('npcs', []):
         nid = n.get('id')
         if n.get('name') and not n.get('name_key'):
@@ -80,7 +84,8 @@ def scan_quests(mapping):
     path = os.path.join(DATA_DIR, 'quests.json')
     if not os.path.exists(path):
         return
-    data = json.load(open(path, 'r', encoding='utf-8'))
+    with open(path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
     for q in data.get('quests', []):
         qid = q.get('id')
         if q.get('title') and not q.get('title_key'):

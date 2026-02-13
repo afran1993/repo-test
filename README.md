@@ -1,6 +1,4 @@
-Siamo una squadra fortissimi!
-
-## Gioco RPG testuale
+# Gioco RPG testuale
 
 Per avviare il gioco:
 

@@ -5,8 +5,18 @@ import os
 import argparse
 import time
 
+from src.combat import CombatEngine, create_fight_with_engine, init_abilities_registry, get_registry
+from src.players import Player
+from src.persistence import save_game, load_game, hospital
+from src.menus import potion_menu, equip_weapon_menu, accessories_menu, shop, open_treasure
+from src.story import (
+    check_story_milestone, get_story_status, get_boss_for_location,
+    get_current_main_quest, update_story_progress, teach_skill, has_skill,
+    get_available_skills, get_learned_skills, check_location_access
+)
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '.'))
+
 
 # Carica i dati
 LOCATIONS_DATA = None
@@ -38,6 +48,9 @@ def load_data():
         QUESTS_DATA = json.load(f)
     with open(os.path.join(ROOT, 'data', 'npcs.json'), 'r') as f:
         NPCS_DATA = json.load(f)
+    
+    # Initialize abilities registry
+    init_abilities_registry(os.path.join(ROOT, 'data', 'abilities.json'))
 
 
 # Type matchup system (simile a Pokemon)
@@ -190,41 +203,15 @@ def get_boss_for_location(location_id):
 
 
 def apply_boss_ability(player, boss, ability_name):
-    """Applica una abilità speciale del boss."""
-    bonus_damage = 0
-    special_effect = ""
+    """
+    Applica una abilità speciale del boss (data-driven).
     
-    ability_effects = {
-        "shadow_strike": {"damage": 1.8, "effect": "L'Emissario attacca dalle ombre!"},
-        "life_drain": {"damage": 1.2, "effect": "Il boss assorbe la tua vitalità!", "heal": 0.5},
-        "inferno_blast": {"damage": 2.0, "effect": "L'attacco infernale ti avvolge in fiamme!"},
-        "flame_burst": {"damage": 1.5, "effect": "Il fuoco si espande in un'onda devastante!"},
-        "tidal_wave": {"damage": 1.9, "effect": "Un'onda gigante ti travolge!"},
-        "freeze_solid": {"damage": 1.3, "effect": "Il ghiaccio ti paralizza!", "stun": 0.3},
-        "hurricane_strike": {"damage": 1.7, "effect": "Un uragano ti colpisce!"},
-        "lightning_bolt": {"damage": 2.1, "effect": "Un fulmine cade dal cielo!"},
-        "earthquake": {"damage": 1.8, "effect": "La terra si apre sotto i tuoi piedi!"},
-        "stone_prison": {"damage": 0.5, "effect": "Sei intrappolato nella pietra!", "stun": 0.5},
-        "divine_blessing": {"damage": 0, "heal": 2.0, "effect": "Il drago si cura con la benedizione divina!"},
-        "sky_rage": {"damage": 2.2, "effect": "La furia del cielo si abbatte su di te!"},
-        "legendary_breath": {"damage": 2.5, "effect": "Il respiro leggendario del drago!"},
-        "reality_warp": {"damage": 2.3, "effect": "La realtà si contorce attorno al Lich!"},
-        "soul_drain": {"damage": 1.5, "heal": 1.0, "effect": "Il Lich ti drena l'anima!"},
-        "curse_of_death": {"damage": 2.0, "effect": "Una terribile maledizione ti colpisce!"},
-        "summon_minions": {"damage": 0.8, "effect": "Il Lich invoca minioni oscuri!"},
-    }
+    Now uses the centralized abilities registry from data/abilities.json.
+    Maintains backward compatibility with existing code.
+    """
+    from src.combat.abilities import apply_ability
     
-    if ability_name in ability_effects:
-        effect = ability_effects[ability_name]
-        damage = int(boss.atk * effect.get("damage", 1.0) * random.uniform(0.8, 1.2))
-        
-        if effect.get("heal"):
-            boss.hp = min(boss.max_hp, int(boss.hp + boss.max_hp * effect["heal"]))
-        
-        special_effect = effect.get("effect", "")
-        return damage, special_effect
-    
-    return 0, ""
+    return apply_ability(boss, player, ability_name)
 
 
 # Sistema di abilità e dialoghi
@@ -526,190 +513,6 @@ class Location:
         return None
 
 
-class Player:
-    def __init__(self, name="Eroe"):
-        self.name = name
-        self.level = 1
-        self.xp = 0
-        self.max_hp = 30
-        self.hp = self.max_hp
-        self.atk = 6
-        self.dex = 5  # Agilità / Destrezza - influenza evasione
-        self.gold = 0  # Inizia senza oro
-        self.potions = {}  # Dizionario di pozioni: {tipo: quantità}
-        self.potions["potion_small"] = 0
-        self.potions["potion_medium"] = 0
-        self.potions["potion_strong"] = 0
-        self.potions["mana_potion"] = 0
-        self.potions["mana_potion_strong"] = 0
-        self.mana = 20
-        self.max_mana = 20
-        
-        self.equipped_weapon = None  # Arma equipaggiata - ALL'INIZIO NONE!
-        self.inventory = []  # Oggetti nell'inventario
-        
-        # Accessori equipaggiati
-        self.accessories = {
-            "ring": None,
-            "necklace": None,
-            "amulet": None,
-            "bracelet": None,
-        }
-        
-        # Armi disponibili all'inizio (inizialmente solo la spada arrugginita, poi troverai altre)
-        self.weapons = [
-            {"id": "sword_rusty", "name": "Spada Arrugginita", "atk": 3, "dex": 1, "evasion_bonus": 0.10},
-        ]
-        
-        # Accessori disponibili all'inizio
-        self.available_accessories = [
-            {"id": "ring_strength", "name": "Anello della Forza", "slot": "ring", "stats": {"atk": 3}},
-            {"id": "ring_dexterity", "name": "Anello della Destrezza", "slot": "ring", "stats": {"dex": 3}, "evasion_bonus": 0.10},
-            {"id": "necklace_power", "name": "Collana del Potere", "slot": "necklace", "stats": {"atk": 2, "dex": 1}},
-            {"id": "amulet_wisdom", "name": "Amuleto della Saggezza", "slot": "amulet", "stats": {"atk": 1, "dex": 2}},
-        ]
-        
-        # Posizione sulla mappa
-        self.current_location = "beach"
-        
-        # Sistema di storia principale
-        self.story_progress = "act_1_awakening"
-        self.story_stage = 0  # Quale stage del capitolo corrente
-        self.completed_acts = []
-        self.postgame = False  # True quando ha completato tutta la storia
-        
-        # Sistema di abilità progressive
-        self.skills = {
-            "swimming": False,      # Nuoto - abilita lagoon e underwater_cave
-            "diving": False,        # Immersione - abilita solo underwater_cave profonda
-            "climbing": False,      # Arrampicata - accesso a aree alte
-            "pickpocketing": False, # Furto - accesso a missioni nascoste
-            "stealth": False,       # Invisibilità - accesso a zone protette
-            "healing": False,       # Guarigione - cura potenziata
-            "magic": False,         # Magia - sblocca attacchi speciali
-            "crafting": False,      # Artigianato - creare oggetti
-        }
-        
-        # Dialoghi completati e scelte effettuate
-        self.dialogues_completed = []
-        self.dialogue_choices = {}  # npc_id -> choice_id per tracciare le decisioni
-
-    def is_alive(self):
-        return self.hp > 0
-
-    def attack(self, target):
-        total_atk = self.get_total_atk()
-        dmg = random.randint(max(1, total_atk - 2), total_atk + 2)
-        target.hp -= dmg
-        return dmg
-
-    def use_potion(self, potion_type="potion_small"):
-        if potion_type not in self.potions or self.potions[potion_type] <= 0:
-            return 0
-        
-        if potion_type.startswith("mana"):
-            mana_restore = 20 if potion_type == "mana_potion" else 50
-            self.mana = min(self.max_mana, self.mana + mana_restore)
-            self.potions[potion_type] -= 1
-            return mana_restore
-        else:
-            # Pozione di cura
-            heal_amounts = {
-                "potion_small": 12,
-                "potion_medium": 25,
-                "potion_strong": 50
-            }
-            heal = heal_amounts.get(potion_type, 0)
-            self.hp = min(self.get_total_max_hp(), self.hp + heal)
-            self.potions[potion_type] -= 1
-            return heal
-
-    def gain_xp(self, amount):
-        self.xp += amount
-        lvl_up = False
-        while self.xp >= self.level * 12:
-            self.xp -= self.level * 12
-            self.level += 1
-            self.max_hp += 6
-            self.atk += 2
-            self.dex += 1
-            self.hp = self.max_hp
-            lvl_up = True
-        return lvl_up
-
-    def status(self):
-        weapon_str = f" [{self.equipped_weapon['name']}]" if self.equipped_weapon else " [Pugno]"
-        acc_str = ""
-        for slot, acc in self.accessories.items():
-            if acc:
-                acc_str += f" {acc['name']}"
-        total_atk = self.get_total_atk()
-        total_dex = self.get_total_dex()
-        total_potions = sum(self.potions.values())
-        return f"{self.name} - LV {self.level}  HP {self.hp}/{self.get_total_max_hp()}  ATK {total_atk}  DEX {total_dex}  XP {self.xp}/{self.level*12}  Gold {self.gold}  Potions 🧪{total_potions}{weapon_str}{acc_str}"
-    
-    def equip_weapon(self, weapon_id):
-        """Equipaggia un'arma."""
-        for w in self.weapons:
-            if w["id"] == weapon_id:
-                self.equipped_weapon = w
-                return True
-        return False
-    
-    def get_evasion_chance(self):
-        """Calcola la probabilità di schivare basata su DEX e arma."""
-        base_evasion = 0.1 + (self.dex * 0.02)  # 10% base + 2% per DEX
-        weapon_bonus = self.equipped_weapon.get("evasion_bonus", 0) if self.equipped_weapon else 0
-        
-        # Aggiungi bonus da accessori
-        accessory_bonus = 0
-        for acc in self.accessories.values():
-            if acc:
-                accessory_bonus += acc.get("evasion_bonus", 0)
-        
-        return max(0, min(0.5, base_evasion + weapon_bonus + accessory_bonus))  # Min 0%, Max 50%
-    
-    def get_total_atk(self):
-        """Calcola l'ATK totale includendo arma e accessori."""
-        weapon_bonus = self.equipped_weapon.get("atk", 0) if self.equipped_weapon else 0
-        accessory_bonus = 0
-        for acc in self.accessories.values():
-            if acc:
-                accessory_bonus += acc.get("stats", {}).get("atk", 0)
-        return self.atk + weapon_bonus + accessory_bonus
-    
-    def get_total_dex(self):
-        """Calcola la DEX totale includendo arma e accessori."""
-        weapon_bonus = self.equipped_weapon.get("dex", 0) if self.equipped_weapon else 0
-        accessory_bonus = 0
-        for acc in self.accessories.values():
-            if acc:
-                accessory_bonus += acc.get("stats", {}).get("dex", 0)
-        return self.dex + weapon_bonus + accessory_bonus
-    
-    def get_total_max_hp(self):
-        """Calcola l'HP massimo includendo accessori."""
-        accessory_bonus = 0
-        for acc in self.accessories.values():
-            if acc:
-                accessory_bonus += acc.get("stats", {}).get("max_hp", 0)
-        return self.max_hp + accessory_bonus
-    
-    def equip_accessory(self, accessory_id):
-        """Equipaggia un accessorio."""
-        for acc in self.available_accessories:
-            if acc["id"] == accessory_id:
-                slot = acc["slot"]
-                self.accessories[slot] = acc
-                return True
-        return False
-    
-    def unequip_accessory(self, slot):
-        """Dis-equipaggia un accessorio."""
-        if slot in self.accessories:
-            self.accessories[slot] = None
-            return True
-        return False
 
 
 
@@ -749,334 +552,52 @@ def potion_menu(player):
     return None
 
 
-def print_location_info(location):
-    """Stampa le informazioni di una location."""
-    # If we have a player context, prefer the extended description
-    try:
-        import inspect
-        frame = inspect.currentframe().f_back
-        player = frame.f_locals.get('player') if frame is not None else None
-    except Exception:
-        player = None
-
-    if player:
-        print(location.describe_for(player))
-    else:
-        print(location.describe_for(player))
-
-
 def fight(player, enemy, current_location=None, is_boss=False):
-    boss_str = " [BOSS]" if is_boss else ""
-    enemy_emoji = get_enemy_emoji(enemy)
-    boss_emoji = "👹" if is_boss else ""
-    print(f"⚔️  Incontro! {enemy_emoji} {enemy.name}{boss_str} ({enemy.element}) appare (HP {enemy.hp})")
-    if current_location:
-        print(f"📍 Sei in: {current_location.name} (Elemento: {enemy.element})")
-    time.sleep(0.4)
+    """
+    Main fight function - now using decoupled CombatEngine.
     
-    turn = 0
-    while player.is_alive() and enemy.is_alive():
-        print()
-        print(player.status())
-        print(f"Nemico: {enemy_emoji} {enemy.name}{boss_str} ({enemy.element}) - HP {enemy.hp}/{enemy.max_hp}")
-        print("Scegli: (1)Attacca  (2)Pozione  (3)Fuggi")
-        choice = input("-> ").strip()
-        if choice == "1":
-            dmg = player.attack(enemy)
-            
-            # Applica modifier di elemento (player attacca con arma "None" vs nemico)
-            weapon_element = player.equipped_weapon.get("element", "None") if player.equipped_weapon else "None"
-            element_modifier = get_element_modifier(weapon_element, enemy.element)
-            dmg = int(dmg * element_modifier)
-            
-            # Mostra messaggio di vantaggio/svantaggio
-            if element_modifier > 1.0:
-                print(f"  >>> ✨ È super efficace! ✨")
-            elif element_modifier < 1.0:
-                print(f"  >>> ❌ Non è molto efficace...")
-            
-            # Nemico tenta di schivare
-            evasion_chance = 0.2
-            if is_boss:
-                evasion_chance = 0.15  # Boss hanno meno evasione
-            
-            if random.random() < evasion_chance:
-                print(f"🛡️  Il {enemy.name} evita l'attacco!")
-            else:
-                enemy.hp -= dmg
-                print(f"🗡️  Colpisci il {enemy.name} per {dmg} danni.")
-        elif choice == "2":
-            potion_choice = potion_menu(player)
-            if potion_choice:
-                healed = player.use_potion(potion_choice)
-                if healed:
-                    potion_name = potion_choice.replace("_", " ").title()
-                    print(f"🧪 Usi una {potion_name} e recuperi {healed} HP/Mana.")
-            else:
-                print("Non hai pozioni!")
-                continue
-        elif choice == "3":
-            if is_boss:
-                if random.random() < 0.2:  # Molto difficile fuggire dai boss
-                    print("💨 Fuggi riuscita!")
-                    return False
-                else:
-                    print("❌ Non riesci a fuggire dal boss!")
-            else:
-                if random.random() < 0.5:
-                    print("💨 Fuggi riuscita!")
-                    return False
-                else:
-                    print("❌ Non riesci a fuggire!")
-        else:
-            print("Scelta non valida.")
-            continue
-
-        if enemy.is_alive():
-            # Turno del nemico
-            abilities = enemy.id.split("_") if hasattr(enemy, "id") else []
-            should_use_ability = False
-            ability = None
-            
-            if is_boss and turn > 0 and turn % 3 == 0:  # Ogni 3 turni, boss usa abilità
-                boss_data = None
-                for e in ENEMIES_DATA.get("enemies", []):
-                    if e.get("id") == enemy.id:
-                        boss_data = e
-                        break
-                
-                if boss_data and boss_data.get("abilities"):
-                    ability = random.choice(boss_data.get("abilities", []))
-                    should_use_ability = True
-            
-            if should_use_ability and ability:
-                edmg, effect = apply_boss_ability(player, enemy, ability)
-                print(f"\n💥 >> {enemy.name} usa {ability}!")
-                print(f"   {effect}")
-                if edmg > 0:
-                    if random.random() < player.get_evasion_chance() * 0.7:  # Più difficile schivare abilità
-                        print(f"🛡️  Schivi l'abilità del {enemy.name}!")
-                    else:
-                        player.hp -= edmg
-                        print(f"💧 {enemy.name} ti infligge {edmg} danni!")
-            else:
-                edmg = random.randint(max(1, enemy.atk - 2), enemy.atk + 2)
-                
-                # Nemico attacca - applica suo elemento vs player
-                enemy_element_modifier = get_element_modifier(enemy.element, "None")  # vs player neutral
-                edmg = int(edmg * enemy_element_modifier)
-                
-                # Se è super efficace, il nemico fa più danno
-                if enemy_element_modifier > 1.0:
-                    print(f"  >>> ✨ L'attacco del {enemy.name} è super efficace! ✨")
-                
-                # Giocatore tenta di schivare basato su DEX e arma
-                if random.random() < player.get_evasion_chance():
-                    print(f"🛡️  Schivi l'attacco del {enemy.name}!")
-                else:
-                    player.hp -= edmg
-                    print(f"💧 {enemy.name} ti colpisce per {edmg} danni.")
-            
-            turn += 1
-
-    if player.is_alive():
-        print(f"✨ Hai sconfitto il {enemy.name}! ✨")
+    Maintains backward compatibility with existing code.
+    """
+    # Create engine with element modifier and ability application
+    engine = CombatEngine(
+        player=player,
+        enemy=enemy,
+        element_modifier_fn=get_element_modifier,
+        apply_ability_fn=apply_boss_ability,
+        is_boss=is_boss,
+        current_location=current_location,
+    )
+    
+    # Use CLI adapter to handle the fight
+    victory = create_fight_with_engine(
+        engine=engine,
+        player=player,
+        enemy=enemy,
+        emoji_getter=get_enemy_emoji,
+    )
+    
+    # Post-fight logic
+    if victory:
         player.gold += enemy.gold_reward
         leveled = player.gain_xp(enemy.xp_reward)
-        print(f"⭐ Ottieni {enemy.xp_reward} XP e {enemy.gold_reward} gold.")
         if leveled:
             print(f"🎉 Sei salito al livello {player.level}! HP ripristinati.")
         save_game(player)
         return True
     else:
-        print("☠️  Sei stato sconfitto...")
-        hospital(player)
-        return False
-
-
-def save_game(player, path="save.json"):
-    data = {
-        "name": player.name,
-        "level": player.level,
-        "xp": player.xp,
-        "max_hp": player.max_hp,
-        "hp": player.hp,
-        "atk": player.atk,
-        "dex": player.dex,
-        "gold": player.gold,
-        "potions": player.potions,
-        "equipped_weapon": player.equipped_weapon,
-        "accessories": player.accessories,
-    }
-    with open(path, "w") as f:
-        json.dump(data, f)
-    print("Partita salvata.")
-
-
-def load_game(path="save.json"):
-    if not os.path.exists(path):
-        print("Nessun salvataggio trovato.")
-        return None
-    with open(path, "r") as f:
-        data = json.load(f)
-    p = Player(data.get("name", "Eroe"))
-    p.level = data.get("level", 1)
-    p.xp = data.get("xp", 0)
-    p.max_hp = data.get("max_hp", 30)
-    p.hp = data.get("hp", p.max_hp)
-    p.atk = data.get("atk", 6)
-    p.dex = data.get("dex", 5)
-    p.gold = data.get("gold", 0)
-    p.potions = data.get("potions", {})
-    p.equipped_weapon = data.get("equipped_weapon", None)
-    p.accessories = data.get("accessories", {"ring": None, "necklace": None, "amulet": None, "bracelet": None})
-    print("Partita caricata.")
-    return p
-
-
-def hospital(player):
-    """Heals player after defeat, applies gold penalty, and saves."""
-    print("\n--- OSPEDALE ---")
-    print("Sei stato portato in ospedale e ti stai riprendendo...")
-    time.sleep(0.5)
-    
-    # Punizione: perdere oro
-    penalty = max(5, player.gold // 3)  # Perdi 1/3 dell'oro (minimo 5)
-    player.gold = max(0, player.gold - penalty)
-    
-    # Guarigione completa
-    player.hp = player.get_total_max_hp()
-    
-    print(f"Ti sei ripreso completamente.")
-    print(f"Hai pagato {penalty} gold per le cure.")
-    print(f"Oro rimasto: {player.gold}\n")
-    
-    # Salva il giocatore guarito
-    save_game(player)
-    time.sleep(0.5)
-
-
-def equip_weapon_menu(player):
-    """Menu per equipaggiare armi."""
-    print("\n--- EQUIPAGGIA ARMA ---")
-    for i, w in enumerate(player.weapons, 1):
-        equipped = " [EQUIPPED]" if player.equipped_weapon and player.equipped_weapon["id"] == w["id"] else ""
-        print(f"{i}) {w['name']} - ATK +{w['atk']}, DEX {w['dex']:+d}, Evasione {w['evasion_bonus']:+.0%}{equipped}")
-    print(f"{len(player.weapons) + 1}) Niente (Pugno)")
-    choice = input("Scegli: ").strip()
-    try:
-        idx = int(choice) - 1
-        if idx == len(player.weapons):
-            player.equipped_weapon = None
-            print("Stacchi l'arma.")
-        elif 0 <= idx < len(player.weapons):
-            player.equipped_weapon = player.weapons[idx]
-            print(f"Equipaggi {player.equipped_weapon['name']}!")
-    except ValueError:
-        print("Scelta non valida.")
-
-
-def accessories_menu(player):
-    """Menu per equipaggiare accessori (anelli, collane, amuleti, braccialetti)."""
-    print("\n--- EQUIPAGGIA ACCESSORI ---")
-    for i, acc in enumerate(player.available_accessories, 1):
-        equipped = " [EQUIPPED]" if player.accessories.get(acc["slot"]) and player.accessories[acc["slot"]]["id"] == acc["id"] else ""
-        atk_bonus = acc.get("stats", {}).get("atk", 0)
-        dex_bonus = acc.get("stats", {}).get("dex", 0)
-        hp_bonus = acc.get("stats", {}).get("max_hp", 0)
-        bonuses = []
-        if atk_bonus: bonuses.append(f"ATK +{atk_bonus}")
-        if dex_bonus: bonuses.append(f"DEX +{dex_bonus}")
-        if hp_bonus: bonuses.append(f"HP +{hp_bonus}")
-        bonus_str = ", ".join(bonuses) if bonuses else "Nessun bonus"
-        print(f"{i}) {acc['name']} ({acc['slot']}) - {bonus_str}{equipped}")
-    print(f"{len(player.available_accessories) + 1}) Esci dal menu")
-    choice = input("Scegli: ").strip()
-    try:
-        idx = int(choice) - 1
-        if idx == len(player.available_accessories):
-            return
-        elif 0 <= idx < len(player.available_accessories):
-            acc = player.available_accessories[idx]
-            slot = acc["slot"]
-            if player.accessories[slot] and player.accessories[slot]["id"] == acc["id"]:
-                player.unequip_accessory(slot)
-                print(f"Hai rimosso {acc['name']}.")
+        # Check if it was a flee or a defeat
+        if engine.finished and not engine.victory:
+            # If finished but not victory, it was a defeat (unless it was a flee)
+            if player.is_alive():
+                # Player fled successfully
+                return False
             else:
-                player.equip_accessory(acc["id"])
-                print(f"Hai equipaggiato {acc['name']}!")
-    except ValueError:
-        print("Scelta non valida.")
-def shop(player):
-    print("🏪 Bottega: (1)Pozione (5 gold)  (2)Niente")
-    choice = input("-> ").strip()
-    if choice == "1":
-        if player.gold >= 5:
-            player.gold -= 5
-            player.potions["potion_small"] += 1
-            print("✅ Acquistata pozione.")
+                # Player was defeated
+                hospital(player)
+                return False
         else:
-            print("❌ Non hai abbastanza gold.")
-    else:
-        print("Esci dalla bottega.")
-
-
-def open_treasure(player, location):
-    """Apre un forziere in una location."""
-    if not location.treasure:
-        print("Non ci sono forzieri qui.")
-        return
-    
-    print("\nForzieri disponibili:")
-    for i, treasure in enumerate(location.treasure, 1):
-        print(f"{i}) {treasure.get('type', 'chest')} ({treasure.get('rarity', 'common')})")
-    print(f"{len(location.treasure) + 1}) Indietro")
-    
-    choice = input("Quale forziere apri? ").strip()
-    try:
-        idx = int(choice) - 1
-        if idx == len(location.treasure):
-            return
-        elif 0 <= idx < len(location.treasure):
-            treasure = location.treasure[idx]
-            print(f"\nApri il {treasure.get('type', 'forziere')}...")
-            time.sleep(0.3)
-            
-            drops = treasure.get('drops', [])
-            for drop_item in drops:
-                if drop_item in ITEMS_DATA:
-                    # Sono un item diretto
-                    item_data = next((i for i in ITEMS_DATA if i.get('id') == drop_item), None)
-                    if item_data:
-                        print(f"Trovi: {item_data.get('display', drop_item)}")
-                        # Aggiungi all'inventario o equipaggia
-                        if item_data.get('type') == 'consumable':
-                            potion_type = item_data.get('id')
-                            player.potions[potion_type] = player.potions.get(potion_type, 0) + 1
-                        elif item_data.get('type') == 'weapon':
-                            # Aggiungi all'elenco delle armi
-                            weapon = {
-                                "id": item_data.get('id'),
-                                "name": item_data.get('display'),
-                                "atk": item_data.get('stats', {}).get('atk', 0),
-                                "dex": item_data.get('stats', {}).get('dex', 0),
-                                "evasion_bonus": item_data.get('evasion_bonus', 0)
-                            }
-                            player.weapons.append(weapon)
-                            print(f"  >> Aggiunti alla lista di armi disponibili!")
-                        elif item_data.get('type') == 'treasure':
-                            gold_amount = item_data.get('treasure', {}).get('gold', 0)
-                            player.gold += gold_amount
-                            print(f"  >> +{gold_amount} oro!")
-                        else:
-                            player.inventory.append(item_data)
-            
-            # Rimuovi il forziere (può essere aperto solo una volta per partita)
-            location.treasure.pop(idx)
-    except ValueError:
-        print("Scelta non valida.")
-
-
+            hospital(player)
+            return False
 
 
 def game_loop_map(player):
