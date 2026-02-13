@@ -1,5 +1,8 @@
 import random
+import logging
 from src.elements.elements import element_modifier, reaction_for
+
+logger = logging.getLogger(__name__)
 
 
 def calculate_damage(attacker, defender, base=5, element=None):

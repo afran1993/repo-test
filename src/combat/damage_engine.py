@@ -15,9 +15,12 @@ This ensures:
 """
 
 import random
+import logging
 from dataclasses import dataclass, field
 from typing import Optional, Dict, Any
 from enum import Enum
+
+logger = logging.getLogger(__name__)
 
 
 class DamageType(Enum):

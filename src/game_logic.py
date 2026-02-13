@@ -4,7 +4,10 @@ import time
 from src.story import (
     check_story_milestone, get_story_status, get_boss_for_location,
     get_current_main_quest, update_story_progress, check_location_access,
-    get_npcs_in_location, interact_with_npc, get_available_skills, get_learned_skills
+    get_available_skills, get_learned_skills
+)
+from src.npc_system import (
+    get_npcs_in_location, interact_with_npc
 )
 from src.menus import equip_weapon_menu, accessories_menu, open_treasure
 from src.persistence import save_game

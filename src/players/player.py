@@ -1,6 +1,9 @@
 """Core Player class with essential attributes and stat calculations."""
 
 import random
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class Player:
@@ -113,7 +116,7 @@ class Player:
             return heal
 
     def gain_xp(self, amount):
-        """Guadagna XP e effettua level up."""
+        """Gain XP and perform level up if threshold reached."""
         self.xp += amount
         lvl_up = False
         while self.xp >= self.level * 12:
@@ -123,6 +126,7 @@ class Player:
             self.atk += 2
             self.dex += 1
             self.hp = self.max_hp
+            logger.info(f"{self.name} leveled up to {self.level}")
             lvl_up = True
         return lvl_up
 

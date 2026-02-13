@@ -1,5 +1,9 @@
 """Story progress tracking and management."""
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class StoryManager:
     """Gestisce il sistema di storia principale del gioco."""

@@ -1,0 +1,10 @@
+# Core dependencies
+# (This project uses only Python stdlib, but we'll add testing tools)
+
+# Testing
+pytest>=7.0
+pytest-cov>=3.0
+
+# Code quality / Development
+pylint>=2.0
+black>=22.0
