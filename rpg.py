@@ -1307,7 +1307,18 @@ def fight_auto(player, enemy):
 
 
 if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser(description="RPG Game")
     load_data()  # Carica tutti i dati (locations, enemies, items, quests, npcs)
+
+    parser.add_argument(
+        '--demo', 
+        action='store_true',  # se presente diventa True, altrimenti False
+        help='Esegui il gioco in modalità demo'
+    )
+
+    args = parser.parse_args()
     
     parser = argparse.ArgumentParser()
     args = parser.parse_args()
