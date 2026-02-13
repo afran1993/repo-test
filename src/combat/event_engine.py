@@ -18,6 +18,7 @@ from typing import List, Optional, Dict, Any, Callable
 from enum import Enum
 
 from src.combat.damage_engine import DamageCalculator, create_attack_damage, create_enemy_attack_damage
+from src.config import get_config
 
 
 class CombatEventType(Enum):
@@ -230,9 +231,10 @@ class CombatEngine:
             )
 
         # Enemy evasion
-        evasion_chance = 0.2
+        cfg = get_config()
+        evasion_chance = cfg.combat.BASE_EVASION
         if self.is_boss:
-            evasion_chance = 0.15
+            evasion_chance = max(0.0, cfg.combat.BASE_EVASION * 0.75)
 
         if random.random() < evasion_chance:
             self.events.append(
@@ -292,10 +294,12 @@ class CombatEngine:
 
     def _player_flee(self):
         """Handle player flee attempt."""
+        cfg = get_config()
+        # Bosses are harder to flee from; leave a configurable multiplier
         if self.is_boss:
-            flee_chance = 0.2
+            flee_chance = max(0.0, cfg.combat.FLEE_CHANCE * 0.4)
         else:
-            flee_chance = 0.5
+            flee_chance = cfg.combat.FLEE_CHANCE
 
         if random.random() < flee_chance:
             self.events.append(
@@ -333,7 +337,8 @@ class CombatEngine:
         should_use_ability = False
         ability_name = None
 
-        if self.is_boss and self.turn > 0 and self.turn % 3 == 0:
+        cfg = get_config()
+        if self.is_boss and self.turn > 0 and self.turn % cfg.combat.BOSS_ABILITY_INTERVAL == 0:
             abilities = getattr(self.enemy, "abilities", [])
             if abilities and self.apply_ability_fn:
                 ability_name = random.choice(abilities)

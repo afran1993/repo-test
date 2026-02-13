@@ -188,12 +188,12 @@ def apply_ability(
     return damage, effect_text
 
 
-# Legacy compatibility function (for rpg.py)
+# Legacy compatibility wrapper for old entry points
 def apply_boss_ability_legacy(player, boss, ability_name: str) -> Tuple[int, str]:
     """
-    Legacy wrapper for backward compatibility with rpg.py.
-    
-    This allows the old code to work without modification while using
+    Legacy wrapper for backward compatibility with older entry points.
+
+    This allows older code to work without modification while using
     the new data-driven system under the hood.
     """
     return apply_ability(boss, player, ability_name)

@@ -1,100 +1,61 @@
-import random
-import logging
-from src.elements.elements import element_modifier, reaction_for
+"""Light compatibility layer for combat utilities.
 
-logger = logging.getLogger(__name__)
+This module provides two convenience functions kept for backward
+compatibility with older imports:
+
+- `calculate_damage(attacker, defender, ...)` -> returns integer damage
+- `turn_based_fight(player, enemy, engine=None)` -> runs a CLI fight loop
+
+Internally the project uses the event-driven `CombatEngine` and the
+`CombatCLIRenderer` adapter in `src.combat.event_engine` and
+`src.combat.cli_adapter`. This module delegates to those implementations
+so other modules that import `src.combat.combat` keep working.
+"""
+
+from src.combat.damage_engine import DamageCalculator, create_attack_damage, create_enemy_attack_damage
+from src.combat.event_engine import CombatEngine
+from src.combat.cli_adapter import create_fight_with_engine
+from src.elements.elements import element_modifier
+from src.combat.abilities import apply_ability
 
 
 def calculate_damage(attacker, defender, base=5, element=None):
-    """Calculate physical/spell damage considering stats and elemental modifiers.
-    - attacker/defender: Character-like objects with .stats and optional .resistances
-    - element: string element name or None
+    """Return an estimated damage value for a basic attack.
+
+    This delegates to the centralized `DamageCalculator` pipeline and
+    returns the final integer damage.
     """
-    atk = base + attacker.stats.get('str', 5)
-    defense = defender.stats.get('end', 3)
-    raw = max(1, atk - int(defense * 0.5) + random.randint(-2, 2))
-    # element modifier
-    resistances = getattr(defender, 'resistances', {})
-    emod = element_modifier(element or 'None', resistances)
-    dmg = max(0, int(raw * emod))
-    return dmg
+    calc = DamageCalculator(element_modifier_fn=element_modifier)
+    # Use create_attack_damage for player-like attackers, otherwise enemy
+    try:
+        # If attacker has get_total_atk assume player-like
+        if hasattr(attacker, 'get_total_atk'):
+            res = create_attack_damage(calc, attacker, defender)
+        else:
+            res = create_enemy_attack_damage(calc, attacker, defender)
+        return res.final_damage
+    except Exception:
+        # Fallback simple formula
+        base_atk = getattr(attacker, 'atk', getattr(attacker, 'stats', {}).get('str', 5))
+        defense = getattr(defender, 'def', getattr(defender, 'stats', {}).get('end', 3))
+        raw = max(1, base_atk - int(defense * 0.5))
+        return max(1, int(raw))
 
 
 def turn_based_fight(player, enemy, engine=None):
-    print(f"Combat start: {player.name} vs {enemy.name}")
-    # simple alternating turns
-    turn = 0
-    while player.is_alive() and enemy.is_alive():
-        actor = player if turn % 2 == 0 else enemy
-        target = enemy if actor is player else player
-        if actor is player:
-            # present choices
-            print(player.describe())
-            print(enemy.describe())
-            print("Actions: (1)Attack  (2)Use Potion  (3)Flee")
-            choice = input('-> ').strip()
-            if choice == '1':
-                # choose simple attack or elemental if equipped
-                elem = None
-                main = player.equipment.get('main')
-                if main and isinstance(main, dict):
-                    elem = main.get('element')
-                dmg = calculate_damage(player, enemy, base=5, element=elem)
-                enemy.hp -= dmg
-                print(f"You hit {enemy.name} for {dmg} dmg.")
-            elif choice == '2':
-                # simple potion
-                pot = next((i for i in player.inventory if i.get('id')=='potion_small'), None)
-                if pot:
-                    heal = 12
-                    player.hp = min(player.max_hp, player.hp + heal)
-                    player.inventory.remove(pot)
-                    print(f"You use a potion and heal {heal} HP.")
-                else:
-                    print("No potion.")
-            elif choice == '3':
-                if random.random() < 0.5:
-                    print("You fled the fight.")
-                    return False
-                else:
-                    print("Flee failed.")
-            else:
-                print("Invalid action, you lose your turn.")
-        else:
-                # enemy action: use AI to decide whether to use ability or attack
-                acted = False
-                from src.enemies.ai import choose_enemy_action
-                action = choose_enemy_action(enemy, player, engine=engine)
-                if action.get('type') == 'ability':
-                    from src.enemies.abilities import use_enemy_ability
-                    abil = action.get('ability')
-                    res = use_enemy_ability(abil, enemy, player, engine=engine)
-                    if res:
-                        if res.get('damage'):
-                            print(f"{enemy.name} uses {res.get('name')} and deals {res.get('damage')} dmg.")
-                        elif res.get('hits'):
-                            print(f"{enemy.name} uses {res.get('name')} and hits {len(res.get('hits'))} times for total {res.get('damage')}.")
-                        elif res.get('spawn'):
-                            print(f"{enemy.name} summons {res.get('spawn')}!")
-                        acted = True
-                if not acted:
-                    dmg = calculate_damage(enemy, player)
-                    player.hp -= dmg
-                    print(f"{enemy.name} hits you for {dmg} dmg.")
-        turn += 1
+    """Run a CLI fight using the event-driven engine and CLI adapter.
 
-        # after each full round, tick statuses
-        if turn % 2 == 0:
-            pa = player.tick_statuses()
-            ea = enemy.tick_statuses()
-            for n,d in pa:
-                print(f"Status {n} deals {d} to {player.name}.")
-            for n,d in ea:
-                print(f"Status {n} deals {d} to {enemy.name}.")
+    This keeps the old function signature while delegating behaviour to
+    `CombatEngine` and `create_fight_with_engine`.
+    """
+    from src.elements.elements import element_modifier as _elem
 
-    if player.is_alive():
-        print(f"You defeated {enemy.name}!")
-        return True
-    else:
-        print("You were defeated...")
-        return False
+    engine_instance = CombatEngine(
+        player=player,
+        enemy=enemy,
+        element_modifier_fn=_elem,
+        apply_ability_fn=apply_ability,
+        damage_calculator=None,
+    )
+
+    return create_fight_with_engine(engine_instance, player, enemy)

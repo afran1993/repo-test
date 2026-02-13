@@ -21,6 +21,7 @@ from typing import Optional, Dict, Any
 from enum import Enum
 
 logger = logging.getLogger(__name__)
+from src.config import get_config
 
 
 class DamageType(Enum):
@@ -187,10 +188,13 @@ class DamageCalculator:
         """Calculate base damage from attacker stats."""
         attacker = context.attacker
         
+        cfg = get_config()
         if context.damage_type == DamageType.SPELL:
             # Spell damage uses INT/magic_power instead of STR
             base = getattr(attacker, "spell_power", 5)
-            rng = random.randint(max(1, base - 1), base + 1)
+            # small variance for spells
+            variance = max(1, int(cfg.combat.DAMAGE_VARIANCE // 2))
+            rng = random.randint(max(1, base - variance), base + variance)
         else:
             # Physical damage
             # Get total ATK including equipment bonuses
@@ -200,8 +204,8 @@ class DamageCalculator:
             else:
                 # Enemy-like object
                 total_atk = getattr(attacker, "atk", 5)
-            
-            rng = random.randint(max(1, total_atk - 2), total_atk + 2)
+            variance = max(1, cfg.combat.DAMAGE_VARIANCE)
+            rng = random.randint(max(1, total_atk - variance), total_atk + variance)
         
         return rng
 

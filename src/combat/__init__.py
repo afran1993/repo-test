@@ -17,6 +17,8 @@ __all__ = [
     "CombatEventType",
     "CombatCLIRenderer",
     "create_fight_with_engine",
+    "CombatView",
+    "CombatController",
     "DamageCalculator",
     "DamageContext",
     "DamageType",

@@ -3,6 +3,7 @@
 import random
 import logging
 from src.exceptions import InsufficientGold, InsufficientXP
+from src.config import get_config
 
 logger = logging.getLogger(__name__)
 
@@ -15,10 +16,13 @@ class Player:
         self.name = name
         self.level = 1
         self.xp = 0
-        self.max_hp = 30
+        cfg = get_config()
+        self.max_hp = cfg.player.STARTING_HP
         self.hp = self.max_hp
-        self.atk = 6
-        self.dex = 5  # Agilità / Destrezza - influenza evasione
+        self.atk = cfg.player.STARTING_ATK
+        self.dex = cfg.player.STARTING_DEX  # Agilità / Destrezza - influenza evasione
+        self.mana = cfg.player.STARTING_MANA
+        self.max_mana = cfg.player.STARTING_MAX_MANA
         self.gold = 0
         self.mana = 20
         self.max_mana = 20
@@ -98,18 +102,18 @@ class Player:
         """Usa una pozione."""
         if potion_type not in self.potions or self.potions[potion_type] <= 0:
             return 0
-        
+        cfg = get_config()
         if potion_type.startswith("mana"):
-            mana_restore = 20 if potion_type == "mana_potion" else 50
+            mana_restore = cfg.potions.MANA_POTION if potion_type == "mana_potion" else cfg.potions.MANA_POTION_STRONG
             self.mana = min(self.max_mana, self.mana + mana_restore)
             self.potions[potion_type] -= 1
             return mana_restore
         else:
             # Pozione di cura
             heal_amounts = {
-                "potion_small": 12,
-                "potion_medium": 25,
-                "potion_strong": 50
+                "potion_small": cfg.potions.POTION_SMALL,
+                "potion_medium": cfg.potions.POTION_MEDIUM,
+                "potion_strong": cfg.potions.POTION_STRONG,
             }
             heal = heal_amounts.get(potion_type, 0)
             self.hp = min(self.get_total_max_hp(), self.hp + heal)
@@ -120,12 +124,14 @@ class Player:
         """Gain XP and perform level up if threshold reached."""
         self.xp += amount
         lvl_up = False
-        while self.xp >= self.level * 12:
-            self.xp -= self.level * 12
+        from src.config import get_config
+        cfg = get_config()
+        while self.xp >= self.level * cfg.player.XP_PER_LEVEL:
+            self.xp -= self.level * cfg.player.XP_PER_LEVEL
             self.level += 1
-            self.max_hp += 6
-            self.atk += 2
-            self.dex += 1
+            self.max_hp += cfg.player.HP_PER_LEVEL
+            self.atk += cfg.player.ATK_PER_LEVEL
+            self.dex += cfg.player.DEX_PER_LEVEL
             self.hp = self.max_hp
             logger.info(f"{self.name} leveled up to {self.level}")
             lvl_up = True
