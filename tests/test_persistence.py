@@ -72,19 +72,23 @@ class TestPersistence:
         assert loaded_player.language == "it"
     
     def test_load_game_nonexistent_file(self):
-        """Test loading from nonexistent file."""
-        player = load_game(path="/nonexistent/path.json")
+        """Test loading from nonexistent file raises SaveNotFound."""
+        from src.exceptions import SaveNotFound
+        import pytest
         
-        assert player is None
+        with pytest.raises(SaveNotFound):
+            load_game(path="/nonexistent/path.json")
     
     def test_load_game_corrupted_file(self, temp_save_path):
-        """Test loading from corrupted JSON file."""
+        """Test loading from corrupted JSON file raises CorruptedSave."""
+        from src.exceptions import CorruptedSave
+        import pytest
+        
         with open(temp_save_path, 'w') as f:
             f.write("{ invalid json")
         
-        player = load_game(path=temp_save_path)
-        
-        assert player is None
+        with pytest.raises(CorruptedSave):
+            load_game(path=temp_save_path)
     
     def test_hospital_heals_player(self, sample_player):
         """Test hospital function heals player."""

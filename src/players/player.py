@@ -2,6 +2,7 @@
 
 import random
 import logging
+from src.exceptions import InsufficientGold, InsufficientXP
 
 logger = logging.getLogger(__name__)
 
@@ -197,3 +198,26 @@ class Player:
         """Ritorna lo status del giocatore."""
         from src.color_manager import format_status
         return format_status(self)
+
+    def spend_gold(self, amount: int) -> None:
+        """Spend gold from player's wallet.
+        
+        Args:
+            amount: Gold amount to spend
+        
+        Raises:
+            InsufficientGold: If player doesn't have enough gold
+        """
+        if self.gold < amount:
+            raise InsufficientGold(amount, self.gold)
+        self.gold -= amount
+        logger.info(f"{self.name} spent {amount} gold. Remaining: {self.gold}")
+
+    def gain_gold(self, amount: int) -> None:
+        """Gain gold.
+        
+        Args:
+            amount: Gold amount to gain
+        """
+        self.gold += amount
+        logger.info(f"{self.name} gained {amount} gold. Total: {self.gold}")

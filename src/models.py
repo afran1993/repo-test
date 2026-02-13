@@ -7,6 +7,7 @@ Contains core game entity models.
 import random
 import logging
 from typing import Dict, Any, Optional, List
+from src.exceptions import LocationNotFound, EnemyNotFound
 
 logger = logging.getLogger(__name__)
 
@@ -36,6 +37,9 @@ def get_location(location_id: str, context: Optional['GameContext'] = None) -> O
     
     Returns:
         Location object or None
+    
+    Raises:
+        LocationNotFound: If location ID not found
     """
     if context:
         locations_data = context.get_locations()
@@ -46,7 +50,7 @@ def get_location(location_id: str, context: Optional['GameContext'] = None) -> O
     
     if not locations_data:
         logger.error("Locations data not loaded")
-        return None
+        raise LocationNotFound(location_id)
     
     for loc_data in locations_data.get("locations", []):
         if loc_data.get("id") == location_id:
@@ -54,7 +58,7 @@ def get_location(location_id: str, context: Optional['GameContext'] = None) -> O
             return Location(loc_data, enemies_data)
     
     logger.warning(f"Location not found: {location_id}")
-    return None
+    raise LocationNotFound(location_id)
 
 
 class Enemy:
@@ -178,6 +182,9 @@ class Location:
         
         Returns:
             Random enemy or None if no enemies
+        
+        Raises:
+            EnemyNotFound: If enemy ID not found in global data
         """
         if not self.enemies or not self.enemies_data:
             return None
@@ -197,4 +204,4 @@ class Location:
                 return Enemy(enemy_data, self.enemies_data)
         
         logger.warning(f"Enemy not found: {enemy_id}")
-        return None
+        raise EnemyNotFound(enemy_id)

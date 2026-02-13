@@ -6,6 +6,7 @@ Handles NPC dialogue, branching conversations, and NPC interaction.
 
 from typing import Optional, Dict, List, Any
 import logging
+from src.exceptions import NPCNotFound
 
 logger = logging.getLogger(__name__)
 
@@ -21,6 +22,9 @@ def start_dialogue(player: Any, npc_id: str, npcs_data: Dict[str, Any]) -> Optio
     
     Returns:
         Dialogue dict or None
+    
+    Raises:
+        NPCNotFound: If NPC not found
     """
     from src.story import has_skill
     
@@ -32,7 +36,7 @@ def start_dialogue(player: Any, npc_id: str, npcs_data: Dict[str, Any]) -> Optio
     
     if not npc:
         logger.debug(f"NPC not found: {npc_id}")
-        return None
+        raise NPCNotFound(npc_id)
     
     dialogs = npc.get("dialogs", [])
     if not dialogs:

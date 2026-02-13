@@ -25,6 +25,7 @@ sys.path.insert(0, REPO_ROOT)
 from src.data_loader import GameContext
 from src.game_runner import GameRunner
 from src.persistence import save_game, load_game
+from src.exceptions import SaveNotFound, LoadFailed, CorruptedSave, GameException
 from src.players import Player
 from src.i18n import i18n
 from src.cli import (
@@ -189,13 +190,27 @@ def main():
             choice = display_load_menu()
             
             if choice == "1":
-                player = load_game()
-                if player:
-                    i18n.set_locale(player.language)
-                    logger.info(f"Game loaded: {player.name}")
-                else:
-                    logger.error("Failed to load game")
-                    return
+                try:
+                    player = load_game()
+                    if player:
+                        i18n.set_locale(player.language)
+                        logger.info(f"Game loaded: {player.name}")
+                    else:
+                        logger.error("Failed to load game")
+                        return
+                except SaveNotFound:
+                    logger.warning("Save file not found, creating new player")
+                    player = _create_new_player()
+                except CorruptedSave as e:
+                    logger.error(f"Save file corrupted: {e.message}")
+                    print(f"Salvataggio corrotto: {e.message}")
+                    print("Creazione nuovo giocatore...")
+                    player = _create_new_player()
+                except LoadFailed as e:
+                    logger.error(f"Load failed: {e.message}")
+                    print(f"Errore nel caricamento: {e.message}")
+                    print("Creazione nuovo giocatore...")
+                    player = _create_new_player()
             else:
                 player = _create_new_player()
         else:

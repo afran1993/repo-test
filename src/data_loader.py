@@ -35,6 +35,14 @@ class GameContext:
         self.quests_data: Optional[Dict[str, Any]] = None
         self.npcs_data: Optional[Dict[str, Any]] = None
         self.abilities_data: Optional[Dict[str, Any]] = None
+        
+        # Repository instances (created on-demand)
+        self._location_repo: Optional[Any] = None
+        self._enemy_repo: Optional[Any] = None
+        self._npc_repo: Optional[Any] = None
+        self._quest_repo: Optional[Any] = None
+        self._item_repo: Optional[Any] = None
+        self._event_bus: Optional[Any] = None
     
     def load_all(self) -> None:
         """Load all required data files."""
@@ -120,9 +128,78 @@ class GameContext:
         if self.abilities_data is None:
             self.load_abilities()
         return self.abilities_data
-
-
-# Default global context instance (for backward compatibility)
+    
+    def get_location_repository(self) -> 'LocationRepository':
+        """Get or create location repository.
+        
+        Returns:
+            LocationRepository instance
+        """
+        if self._location_repo is None:
+            from src.repository_impl import JsonLocationRepository
+            self._location_repo = JsonLocationRepository(
+                self.get_locations(), 
+                self.get_enemies()
+            )
+        return self._location_repo
+    
+    def get_enemy_repository(self) -> 'EnemyRepository':
+        """Get or create enemy repository.
+        
+        Returns:
+            EnemyRepository instance
+        """
+        if self._enemy_repo is None:
+            from src.repository_impl import JsonEnemyRepository
+            self._enemy_repo = JsonEnemyRepository(
+                self.get_enemies(),
+                self.get_locations()
+            )
+        return self._enemy_repo
+    
+    def get_npc_repository(self) -> 'NPCRepository':
+        """Get or create NPC repository.
+        
+        Returns:
+            NPCRepository instance
+        """
+        if self._npc_repo is None:
+            from src.repository_impl import JsonNPCRepository
+            self._npc_repo = JsonNPCRepository(self.get_npcs())
+        return self._npc_repo
+    
+    def get_quest_repository(self) -> 'QuestRepository':
+        """Get or create quest repository.
+        
+        Returns:
+            QuestRepository instance
+        """
+        if self._quest_repo is None:
+            from src.repository_impl import JsonQuestRepository
+            self._quest_repo = JsonQuestRepository(self.get_quests())
+        return self._quest_repo
+    
+    def get_item_repository(self) -> 'ItemRepository':
+        """Get or create item repository.
+        
+        Returns:
+            ItemRepository instance
+        """
+        if self._item_repo is None:
+            from src.repository_impl import JsonItemRepository
+            self._item_repo = JsonItemRepository(self.get_items())
+        return self._item_repo
+    
+    def get_event_bus(self) -> 'EventBus':
+        """Get or create event bus.
+        
+        Returns:
+            EventBus instance
+        """
+        if self._event_bus is None:
+            from src.repositories import SimpleEventBus
+            self._event_bus = SimpleEventBus()
+        return self._event_bus
 _default_context: Optional[GameContext] = None
 
 

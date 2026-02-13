@@ -11,6 +11,13 @@ from typing import Callable, Optional, Any
 from src.data_loader import GameContext
 from src.utils import get_element_modifier, get_enemy_emoji
 from src.models import get_location
+from src.exceptions import (
+    LocationNotFound, 
+    EnemyNotFound, 
+    NPCNotFound, 
+    GameException, 
+    InsufficientGold
+)
 from src.cli import (
     display_main_menu,
     display_character_status,
@@ -278,56 +285,68 @@ class GameRunner:
         display_game_start(player)
         
         while player.is_alive():
-            location = self.get_location(player.current_location)
-            if not location:
-                logger.error(f"Location not found: {player.current_location}")
+            try:
+                location = self.get_location(player.current_location)
+                if not location:
+                    logger.error(f"Location not found: {player.current_location}")
+                    return False
+                
+                # Check for story milestones
+                milestone = self.check_milestone(player, player.current_location)
+                if milestone:
+                    display_story_milestone(milestone)
+                
+                # Display UI
+                display_location_info(location, player)
+                display_story_status(self.get_story_status, player)
+                
+                # Get user input
+                cmd = display_main_menu()
+                logger.debug(f"Menu choice: {cmd}")
+                
+                # Handle menu choices
+                if cmd == "1":
+                    self.handle_explore_combat(player, location)
+                elif cmd == "2":
+                    # Treasure - delegated to imported function
+                    from src.menus import open_treasure
+                    open_treasure(player, location)
+                elif cmd == "3":
+                    from src.menus import equip_weapon_menu
+                    equip_weapon_menu(player)
+                elif cmd == "4":
+                    from src.menus import accessories_menu
+                    accessories_menu(player)
+                elif cmd == "5":
+                    display_inventory(player)
+                elif cmd == "6":
+                    self.handle_npc_interaction(player)
+                elif cmd == "7":
+                    heal = min(player.get_total_max_hp() - player.hp, 15)
+                    player.hp += heal
+                    display_rest_message(heal)
+                elif cmd == "8":
+                    self.handle_map(player, location)
+                elif cmd == "9":
+                    self.handle_skills(player)
+                elif cmd == "10":
+                    self.save_game(player)
+                    logger.info("Game saved")
+                elif cmd == "11":
+                    display_exit_message()
+                    return True
+                else:
+                    display_invalid_menu_choice()
+            except LocationNotFound as e:
+                logger.error(f"Game error: {e.message}")
+                display_invalid_location()
                 return False
-            
-            # Check for story milestones
-            milestone = self.check_milestone(player, player.current_location)
-            if milestone:
-                display_story_milestone(milestone)
-            
-            # Display UI
-            display_location_info(location, player)
-            display_story_status(self.get_story_status, player)
-            
-            # Get user input
-            cmd = display_main_menu()
-            logger.debug(f"Menu choice: {cmd}")
-            
-            # Handle menu choices
-            if cmd == "1":
-                self.handle_explore_combat(player, location)
-            elif cmd == "2":
-                # Treasure - delegated to imported function
-                from src.menus import open_treasure
-                open_treasure(player, location)
-            elif cmd == "3":
-                from src.menus import equip_weapon_menu
-                equip_weapon_menu(player)
-            elif cmd == "4":
-                from src.menus import accessories_menu
-                accessories_menu(player)
-            elif cmd == "5":
-                display_inventory(player)
-            elif cmd == "6":
-                self.handle_npc_interaction(player)
-            elif cmd == "7":
-                heal = min(player.get_total_max_hp() - player.hp, 15)
-                player.hp += heal
-                display_rest_message(heal)
-            elif cmd == "8":
-                self.handle_map(player, location)
-            elif cmd == "9":
-                self.handle_skills(player)
-            elif cmd == "10":
-                self.save_game(player)
-                logger.info("Game saved")
-            elif cmd == "11":
-                display_exit_message()
-                return True
-            else:
-                display_invalid_menu_choice()
+            except GameException as e:
+                logger.error(f"Game error: {e.message}")
+                print(f"Errore di gioco: {e.message}")
+            except Exception as e:
+                logger.error(f"Unexpected error: {e}")
+                print("Si è verificato un errore inatteso. Gioco terminato.")
+                return False
         
         return False
