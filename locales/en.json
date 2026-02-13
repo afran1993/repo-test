@@ -43,10 +43,7 @@
   "enemy.lich":"Lich",
   "enemy.bandit":"Bandit",
   "enemy.ogre":"Ogre",
-  "enemy.wisp":"Wisp"
-}
-
-,
+  "enemy.wisp":"Wisp",
   "item.potion.small": "Small Healing Potion",
   "item.fragment.stone": "Stone Fragment",
   "item.fragment.bone": "Bone Fragment",
@@ -61,6 +58,6 @@
   "item.club.ogre": "Ogre Club",
   "item.fragment.spark": "Spark Fragment",
   "item.essence.spirit": "Spirit Essence"
-
+}
 
 

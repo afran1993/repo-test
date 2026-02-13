@@ -15,6 +15,17 @@ ITEMS_DATA = None
 QUESTS_DATA = None
 NPCS_DATA = None
 
+# Mappa emoji per i nemici
+ENEMY_EMOJIS = {
+    "slime": "🟢", "goblin": "👹", "wolf": "🐺", "dragon": "🐉", "skeleton": "💀",
+    "ghost": "👻", "orc": "👿", "squid": "🐙", "bat": "🦇", "spider": "🕷️",
+    "harpy": "🦅", "wraith": "👻", "knight": "🤺", "crab": "🦀", "bird": "🐦",
+    "elemental": "⚡", "fire": "🔥", "water": "💧", "wind": "🌪️", "earth": "🪨",
+    "construct": "🤖", "beast": "🐻", "undead": "💀", "spirit": "👻", "troll": "👹",
+    "golem": "🪨", "serpent": "🐍", "chimera": "🦁", "lich": "💀", "bandit": "🗡️",
+    "sprite": "✨", "wisp": "💫", "beetle": "🐞", "seagull": "🐦"
+}
+
 def load_data():
     global LOCATIONS_DATA, ENEMIES_DATA, ITEMS_DATA, QUESTS_DATA, NPCS_DATA
     with open(os.path.join(ROOT, 'data', 'locations.json'), 'r') as f:
@@ -56,6 +67,25 @@ def get_element_modifier(attacker_element, defender_element):
         modifier *= 0.75  # -25% svantaggio
     
     return modifier
+
+
+def get_enemy_emoji(enemy):
+    """Ritorna l'emoji appropriato per un nemico basato su tag o ID."""
+    enemy_id = enemy.id.lower() if hasattr(enemy, 'id') else ""
+    enemy_name = enemy.name.lower() if hasattr(enemy, 'name') else ""
+    
+    # Controlla i tag se disponibili
+    if hasattr(enemy, 'tags'):
+        for tag in enemy.tags:
+            if tag in ENEMY_EMOJIS:
+                return ENEMY_EMOJIS[tag]
+    
+    # Controlla per ID o nome
+    for key, emoji in ENEMY_EMOJIS.items():
+        if key in enemy_id or key in enemy_name:
+            return emoji
+    
+    return "👹"  # Emoji predefinita fallback
 
 
 # Story quest system
@@ -615,7 +645,8 @@ class Player:
                 acc_str += f" {acc['name']}"
         total_atk = self.get_total_atk()
         total_dex = self.get_total_dex()
-        return f"{self.name} - LV {self.level}  HP {self.hp}/{self.get_total_max_hp()}  ATK {total_atk}  DEX {total_dex}  XP {self.xp}/{self.level*12}  Gold {self.gold}  Potions {self.potions}{weapon_str}{acc_str}"
+        total_potions = sum(self.potions.values())
+        return f"{self.name} - LV {self.level}  HP {self.hp}/{self.get_total_max_hp()}  ATK {total_atk}  DEX {total_dex}  XP {self.xp}/{self.level*12}  Gold {self.gold}  Potions 🧪{total_potions}{weapon_str}{acc_str}"
     
     def equip_weapon(self, weapon_id):
         """Equipaggia un'arma."""
@@ -736,16 +767,18 @@ def print_location_info(location):
 
 def fight(player, enemy, current_location=None, is_boss=False):
     boss_str = " [BOSS]" if is_boss else ""
-    print(f"Incontro! {enemy.name}{boss_str} ({enemy.element}) appare (HP {enemy.hp})")
+    enemy_emoji = get_enemy_emoji(enemy)
+    boss_emoji = "👹" if is_boss else ""
+    print(f"⚔️  Incontro! {enemy_emoji} {enemy.name}{boss_str} ({enemy.element}) appare (HP {enemy.hp})")
     if current_location:
-        print(f"Sei in: {current_location.name} (Elemento: {enemy.element})")
+        print(f"📍 Sei in: {current_location.name} (Elemento: {enemy.element})")
     time.sleep(0.4)
     
     turn = 0
     while player.is_alive() and enemy.is_alive():
         print()
         print(player.status())
-        print(f"Nemico: {enemy.name}{boss_str} ({enemy.element}) - HP {enemy.hp}/{enemy.max_hp}")
+        print(f"Nemico: {enemy_emoji} {enemy.name}{boss_str} ({enemy.element}) - HP {enemy.hp}/{enemy.max_hp}")
         print("Scegli: (1)Attacca  (2)Pozione  (3)Fuggi")
         choice = input("-> ").strip()
         if choice == "1":
@@ -758,9 +791,9 @@ def fight(player, enemy, current_location=None, is_boss=False):
             
             # Mostra messaggio di vantaggio/svantaggio
             if element_modifier > 1.0:
-                print(f"  >>> È super efficace! <<<")
+                print(f"  >>> ✨ È super efficace! ✨")
             elif element_modifier < 1.0:
-                print(f"  >>> Non è molto efficace...")
+                print(f"  >>> ❌ Non è molto efficace...")
             
             # Nemico tenta di schivare
             evasion_chance = 0.2
@@ -768,33 +801,33 @@ def fight(player, enemy, current_location=None, is_boss=False):
                 evasion_chance = 0.15  # Boss hanno meno evasione
             
             if random.random() < evasion_chance:
-                print(f"Il {enemy.name} evita l'attacco!")
+                print(f"🛡️  Il {enemy.name} evita l'attacco!")
             else:
                 enemy.hp -= dmg
-                print(f"Colpisci il {enemy.name} per {dmg} danni.")
+                print(f"🗡️  Colpisci il {enemy.name} per {dmg} danni.")
         elif choice == "2":
             potion_choice = potion_menu(player)
             if potion_choice:
                 healed = player.use_potion(potion_choice)
                 if healed:
                     potion_name = potion_choice.replace("_", " ").title()
-                    print(f"Usi una {potion_name} e recuperi {healed} HP/Mana.")
+                    print(f"🧪 Usi una {potion_name} e recuperi {healed} HP/Mana.")
             else:
                 print("Non hai pozioni!")
                 continue
         elif choice == "3":
             if is_boss:
                 if random.random() < 0.2:  # Molto difficile fuggire dai boss
-                    print("Fuggi riuscita!")
+                    print("💨 Fuggi riuscita!")
                     return False
                 else:
-                    print("Non riesci a fuggire dal boss!")
+                    print("❌ Non riesci a fuggire dal boss!")
             else:
                 if random.random() < 0.5:
-                    print("Fuggi riuscita!")
+                    print("💨 Fuggi riuscita!")
                     return False
                 else:
-                    print("Non riesci a fuggire!")
+                    print("❌ Non riesci a fuggire!")
         else:
             print("Scelta non valida.")
             continue
@@ -818,14 +851,14 @@ def fight(player, enemy, current_location=None, is_boss=False):
             
             if should_use_ability and ability:
                 edmg, effect = apply_boss_ability(player, enemy, ability)
-                print(f"\n>> {enemy.name} usa {ability}!")
+                print(f"\n💥 >> {enemy.name} usa {ability}!")
                 print(f"   {effect}")
                 if edmg > 0:
                     if random.random() < player.get_evasion_chance() * 0.7:  # Più difficile schivare abilità
-                        print(f"Schivi l'abilità del {enemy.name}!")
+                        print(f"🛡️  Schivi l'abilità del {enemy.name}!")
                     else:
                         player.hp -= edmg
-                        print(f"{enemy.name} ti infligge {edmg} danni!")
+                        print(f"💧 {enemy.name} ti infligge {edmg} danni!")
             else:
                 edmg = random.randint(max(1, enemy.atk - 2), enemy.atk + 2)
                 
@@ -835,28 +868,28 @@ def fight(player, enemy, current_location=None, is_boss=False):
                 
                 # Se è super efficace, il nemico fa più danno
                 if enemy_element_modifier > 1.0:
-                    print(f"  >>> L'attacco del {enemy.name} è super efficace! <<<")
+                    print(f"  >>> ✨ L'attacco del {enemy.name} è super efficace! ✨")
                 
                 # Giocatore tenta di schivare basato su DEX e arma
                 if random.random() < player.get_evasion_chance():
-                    print(f"Schivi l'attacco del {enemy.name}!")
+                    print(f"🛡️  Schivi l'attacco del {enemy.name}!")
                 else:
                     player.hp -= edmg
-                    print(f"{enemy.name} ti colpisce per {edmg} danni.")
+                    print(f"💧 {enemy.name} ti colpisce per {edmg} danni.")
             
             turn += 1
 
     if player.is_alive():
-        print(f"Hai sconfitto il {enemy.name}!")
+        print(f"✨ Hai sconfitto il {enemy.name}! ✨")
         player.gold += enemy.gold_reward
         leveled = player.gain_xp(enemy.xp_reward)
-        print(f"Ottieni {enemy.xp_reward} XP e {enemy.gold_reward} gold.")
+        print(f"⭐ Ottieni {enemy.xp_reward} XP e {enemy.gold_reward} gold.")
         if leveled:
-            print(f"Sei salito al livello {player.level}! HP ripristinati.")
+            print(f"🎉 Sei salito al livello {player.level}! HP ripristinati.")
         save_game(player)
         return True
     else:
-        print("Sei stato sconfitto...")
+        print("☠️  Sei stato sconfitto...")
         hospital(player)
         return False
 
@@ -894,7 +927,7 @@ def load_game(path="save.json"):
     p.atk = data.get("atk", 6)
     p.dex = data.get("dex", 5)
     p.gold = data.get("gold", 0)
-    p.potions = data.get("potions", 0)
+    p.potions = data.get("potions", {})
     p.equipped_weapon = data.get("equipped_weapon", None)
     p.accessories = data.get("accessories", {"ring": None, "necklace": None, "amulet": None, "bracelet": None})
     print("Partita caricata.")
@@ -975,15 +1008,15 @@ def accessories_menu(player):
     except ValueError:
         print("Scelta non valida.")
 def shop(player):
-    print("Bottega: (1)Pozione (5 gold)  (2)Niente")
+    print("🏪 Bottega: (1)Pozione (5 gold)  (2)Niente")
     choice = input("-> ").strip()
     if choice == "1":
         if player.gold >= 5:
             player.gold -= 5
             player.potions["potion_small"] += 1
-            print("Acquistata pozione.")
+            print("✅ Acquistata pozione.")
         else:
-            print("Non hai abbastanza gold.")
+            print("❌ Non hai abbastanza gold.")
     else:
         print("Esci dalla bottega.")
 
@@ -1105,25 +1138,25 @@ def game_loop_map(player):
                     if enemy:
                         result = fight(player, enemy, location)
                         if result:
-                            print(f"\nHai sconfitto il {enemy.name}!")
-                            print(f"Ottieni {enemy.xp_reward} XP e {enemy.gold_reward} gold.")
+                            print(f"\n✨ Hai sconfitto il {enemy.name}! ✨")
+                            print(f"⭐ Ottieni {enemy.xp_reward} XP e {enemy.gold_reward} gold.")
                             player.gold += enemy.gold_reward
                             player.gain_xp(enemy.xp_reward)
                         else:
-                            print("Sei dovuto fuggire...")
+                            print("💨 Sei dovuto fuggire...")
             else:
                 enemy = location.get_random_enemy()
                 if enemy:
                     result = fight(player, enemy, location)
                     if result:
-                        print(f"\nHai sconfitto il {enemy.name}!")
-                        print(f"Ottieni {enemy.xp_reward} XP e {enemy.gold_reward} gold.")
+                        print(f"\n✨ Hai sconfitto il {enemy.name}! ✨")
+                        print(f"⭐ Ottieni {enemy.xp_reward} XP e {enemy.gold_reward} gold.")
                         player.gold += enemy.gold_reward
                         player.gain_xp(enemy.xp_reward)
                     else:
-                        print("Sei dovuto fuggire...")
+                        print("💨 Sei dovuto fuggire...")
                 else:
-                    print("Non trovi nemici qui.")
+                    print("🚫 Non trovi nemici qui.")
         
         elif cmd == "2":
             # Forzieri
@@ -1228,6 +1261,46 @@ def game_loop_map(player):
     
     return False
 
+def random_enemy(player_level=1):
+    """
+    Genera un nemico casuale basato sul livello del giocatore.
+    Seleziona nemici con tier vicino al livello del player.
+    """
+    if not ENEMIES_DATA:
+        return None
+
+    enemies = ENEMIES_DATA.get("enemies", [])
+    if not enemies:
+        return None
+
+    # Filtra nemici con tier compatibile
+    possible = []
+    for e in enemies:
+        tier = e.get("tier", 1)
+
+        # Permette nemici con tier +/- 1 rispetto al livello
+        if abs(tier - player_level) <= 1:
+            possible.append(e)
+
+    # Se non trovi nulla, fallback su tutti
+    if not possible:
+        possible = enemies
+
+    chosen_data = random.choice(possible)
+
+    # Copia dati per scaling leggero
+    scaled_data = chosen_data.copy()
+
+    # Scaling HP e ATK in base al livello
+    level_diff = player_level - scaled_data.get("tier", 1)
+
+    if level_diff > 0:
+        scaled_data["hp"] += level_diff * 5
+        scaled_data["atk"] += level_diff * 2
+
+    return Enemy(scaled_data)
+
+
 
 
 def main_loop(player):
@@ -1247,10 +1320,10 @@ def main_loop(player):
                 if found == "gold":
                     g = random.randint(3, 12)
                     player.gold += g
-                    print(f"Trovi {g} gold!")
+                    print(f"💰 Trovi {g} gold!")
                 elif found == "potion":
-                    player.potions += 1
-                    print("Trovi una pozione!")
+                    player.potions["potion_small"] += 1
+                    print("🧪 Trovi una pozione!")
                 else:
                     print("Niente di interessante qui.")
         elif cmd == "2":
@@ -1262,7 +1335,7 @@ def main_loop(player):
         elif cmd == "5":
             heal = min(player.get_total_max_hp() - player.hp, random.randint(6, 14))
             player.hp += heal
-            print(f"Riposi e recuperi {heal} HP.")
+            print(f"😴 Riposi e recuperi {heal} HP.")
         elif cmd == "6":
             save_game(player)
         elif cmd == "7":
@@ -1325,6 +1398,22 @@ if __name__ == "__main__":
     if args.demo:
         demo()
     else:
-        name = input("Come ti chiami, avventuriero? ").strip() or "Eroe"
-        player = Player(name)
-        game_loop_map(player)
+        # Controlla se esiste un salvataggio
+        if os.path.exists("save.json"):
+            print("📂 Trovato un salvataggio precedente!")
+            print("Cosa vuoi fare?")
+            print("1) Carica partita   2) Inizia una nuova partita")
+            choice = input("-> ").strip()
+            
+            if choice == "1":
+                player = load_game()
+                if player:
+                    game_loop_map(player)
+            else:
+                name = input("Come ti chiami, avventuriero? ").strip() or "Eroe"
+                player = Player(name)
+                game_loop_map(player)
+        else:
+            name = input("Come ti chiami, avventuriero? ").strip() or "Eroe"
+            player = Player(name)
+            game_loop_map(player)
