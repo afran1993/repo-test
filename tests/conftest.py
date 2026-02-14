@@ -83,3 +83,86 @@ def real_test_data():
     game_context = GameContext(data_dir=str(root / "data"))
     game_context.load_all()
     return game_context
+
+
+# GameRunner and CLI fixtures
+
+@pytest.fixture
+def mock_player():
+    """Create a mock player with common attributes."""
+    from unittest.mock import Mock
+    player = Mock(spec=Player)
+    player.name = "TestHero"
+    player.level = 1
+    player.hp = 30
+    player.max_hp = 30
+    player.xp = 0
+    player.gold = 100
+    player.current_location = "village"
+    player.is_alive = Mock(return_value=True)
+    player.status = Mock(return_value="Hero Lvl 1 | 30/30 HP | 100 Gold")
+    player.gain_xp = Mock(return_value=False)
+    player.dialogue_choices = {}
+    player.story_progress = "start"
+    player.inventory = []
+    player.skills = {}
+    player.get_total_max_hp = Mock(return_value=30)
+    return player
+
+
+@pytest.fixture
+def mock_location():
+    """Create a mock location."""
+    from unittest.mock import Mock
+    location = Mock(spec=Location)
+    location.id = "village"
+    location.name = "Village"
+    location.description = "A peaceful village"
+    location.connections = {"north": "forest"}
+    location.get_random_enemy = Mock(return_value=None)
+    location.describe = Mock(return_value="A peaceful village")
+    return location
+
+
+@pytest.fixture
+def mock_boss():
+    """Create a mock boss enemy."""
+    from unittest.mock import Mock
+    boss = Mock(spec=Enemy)
+    boss.id = "boss_guardian"
+    boss.name = "Ancient Guardian"
+    boss.hp = 100
+    boss.xp_reward = 500
+    boss.gold_reward = 200
+    return boss
+
+
+@pytest.fixture
+def mock_context():
+    """Create a mock GameContext."""
+    from unittest.mock import Mock
+    context = Mock(spec=GameContext)
+    context.get_npcs = Mock(return_value={"npcs": []})
+    return context
+
+
+@pytest.fixture
+def game_runner_dependencies():
+    """Create all dependencies for GameRunner."""
+    from unittest.mock import Mock
+    return {
+        'fight_fn': Mock(return_value=True),
+        'get_location_fn': Mock(return_value=None),
+        'get_boss_fn': Mock(return_value=None),
+        'check_access_fn': Mock(return_value=(True, "")),
+        'check_milestone_fn': Mock(return_value=None),
+        'get_current_quest_fn': Mock(return_value=None),
+        'get_story_status_fn': Mock(return_value="Story progress: start"),
+        'get_learned_skills_fn': Mock(return_value=[]),
+        'get_available_skills_fn': Mock(return_value=[]),
+        'teach_skill_fn': Mock(),
+        'update_story_fn': Mock(),
+        'get_npcs_in_location_fn': Mock(return_value=[]),
+        'interact_with_npc_fn': Mock(),
+        'save_game_fn': Mock(),
+    }
