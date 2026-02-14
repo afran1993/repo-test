@@ -84,7 +84,7 @@ class TestStartDialogue:
             ]
         }
         
-        with patch('src.npc_system.has_skill', return_value=True):
+        with patch('src.story.has_skill', return_value=True):
             dialog = start_dialogue(mock_player, "mage", npcs_data)
         
         assert dialog is not None
@@ -112,7 +112,7 @@ class TestStartDialogue:
             ]
         }
         
-        with patch('src.npc_system.has_skill', return_value=False):
+        with patch('src.story.has_skill', return_value=False):
             dialog = start_dialogue(mock_player, "mage", npcs_data)
         
         assert dialog is not None
@@ -289,7 +289,7 @@ class TestExecuteDialogueChoice:
         }
         npcs_data = {"npcs": []}
         
-        with patch('src.npc_system.teach_skill', return_value=(True, "You learned Fireball!")):
+        with patch('src.story.teach_skill', return_value=(True, "You learned Fireball!")):
             consequence = execute_dialogue_choice(mock_player, choice, "mage", npcs_data)
         
         assert "Fireball" in consequence
@@ -347,7 +347,7 @@ class TestExecuteDialogueChoice:
         }
         npcs_data = {"npcs": []}
         
-        with patch('src.npc_system.teach_skill', return_value=(True, "Skill learned!")):
+        with patch('src.story.teach_skill', return_value=(True, "Skill learned!")):
             consequence = execute_dialogue_choice(mock_player, choice, "npc", npcs_data)
         
         mock_player.gain_xp.assert_called_once_with(250)
@@ -520,7 +520,7 @@ class TestInteractWithNPC:
         
         with patch('src.npc_system.start_dialogue', return_value={"text": "Hello"}):
             with patch('src.npc_system.display_dialogue', return_value=[choice]):
-                with patch('src.npc_system.has_skill', return_value=False):
+                with patch('src.story.has_skill', return_value=False):
                     interact_with_npc(mock_player, npc, npcs_data)
         
         assert mock_print.called
@@ -563,7 +563,7 @@ class TestNPCSystemIntegration:
         
         npc = npcs_data["npcs"][0]
         
-        with patch('src.npc_system.has_skill', return_value=True):
+        with patch('src.story.has_skill', return_value=True):
             interact_with_npc(mock_player, npc, npcs_data)
         
         assert mock_print.called
@@ -593,12 +593,12 @@ class TestNPCSystemIntegration:
         }
         
         # First time without skill
-        with patch('src.npc_system.has_skill', return_value=False):
+        with patch('src.story.has_skill', return_value=False):
             dialog1 = start_dialogue(mock_player, "trainer", npcs_data)
             assert dialog1.get("id") == "default"
         
         # Second time with skill
-        with patch('src.npc_system.has_skill', return_value=True):
+        with patch('src.story.has_skill', return_value=True):
             dialog2 = start_dialogue(mock_player, "trainer", npcs_data)
             assert "combat master" in dialog2.get("text", "").lower()
 
